@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import type { Question } from "@/lib/questions";
 
 interface Props {
@@ -20,282 +20,238 @@ const encouragements = [
   "That's helpful.",
   "Noted.",
   "This matters more than you think.",
-  "Almost there.",
   "You're doing well.",
   "That says a lot.",
   "Interesting.",
   "We're getting somewhere.",
-  "One more step closer.",
   "This is the hard part. You're doing it.",
   "Nobody asks these questions. That's the point.",
   "You're being honest. That's rare.",
   "We hear you.",
+  "Almost there.",
+  "One more step.",
 ];
 
 export default function QuestionCard({ question, sensitivityMode, value, onChange, onNext, onBack, isFirst, isLast, currentIndex, totalQuestions }: Props) {
-  const [textValue, setTextValue] = useState("");
   const [animating, setAnimating] = useState(false);
   const [showEncouragement, setShowEncouragement] = useState(false);
   const [encouragement, setEncouragement] = useState("");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const questionText = sensitivityMode ? question.sensitiveText : question.text;
   const isPart2Start = question.id === 8;
+  const isGrid = question.cardLayout === "grid";
 
-  // Reset on question change
   useEffect(() => {
-    if (question.type === "open_text") {
-      setTextValue(typeof value === "string" ? value : "");
-    }
     setAnimating(true);
     setShowEncouragement(false);
     const timer = setTimeout(() => setAnimating(false), 50);
     return () => clearTimeout(timer);
-  }, [question.id, question.type, value]);
-
-  // Auto-focus textarea
-  useEffect(() => {
-    if (question.type === "open_text" && textareaRef.current) {
-      setTimeout(() => textareaRef.current?.focus(), 300);
-    }
-  }, [question.id, question.type]);
+  }, [question.id]);
 
   const isValid = () => {
-    if (question.type === "open_text") return textValue.trim().length >= 10;
     if (question.type === "multi_select") return Array.isArray(value) && value.length > 0;
     if (question.type === "slider") return true;
     return value !== null && value !== undefined;
   };
 
-  const handleNext = () => {
-    // Show encouragement briefly before transitioning
-    setEncouragement(encouragements[currentIndex % encouragements.length]);
-    setShowEncouragement(true);
-    setTimeout(() => {
-      setShowEncouragement(false);
-      onNext();
-    }, 800);
-  };
-
-  // Auto-advance for single choice after selection
-  const handleSingleChoice = (val: string) => {
+  const handleAutoAdvance = (val: string) => {
     onChange(val);
-    // Small delay then auto-advance
     setTimeout(() => {
       setEncouragement(encouragements[currentIndex % encouragements.length]);
       setShowEncouragement(true);
       setTimeout(() => {
         setShowEncouragement(false);
         onNext();
-      }, 700);
-    }, 300);
+      }, 600);
+    }, 250);
   };
 
-  // Encouragement overlay
+  const handleNext = () => {
+    setEncouragement(encouragements[currentIndex % encouragements.length]);
+    setShowEncouragement(true);
+    setTimeout(() => {
+      setShowEncouragement(false);
+      onNext();
+    }, 600);
+  };
+
+  // Encouragement flash
   if (showEncouragement) {
     return (
-      <div className="w-full max-w-2xl mx-auto px-4 flex items-center justify-center min-h-[400px]">
+      <div className="w-full max-w-3xl mx-auto px-4 flex items-center justify-center min-h-[400px]">
         <p className="text-muted text-sm animate-in">{encouragement}</p>
       </div>
     );
   }
 
   // Part 2 transition
-  if (isPart2Start && !value && currentIndex > 0) {
+  if (isPart2Start && value === null) {
     return (
-      <div className="w-full max-w-xl mx-auto px-4">
-        <div className="text-center py-12 animate-in">
-          <div className="w-px h-12 bg-white/10 mx-auto mb-8" />
-          <p className="text-xs text-accent uppercase tracking-wider mb-4">Part 2 of 2</p>
-          <h2 className="text-2xl font-bold mb-3">Who are you now?</h2>
-          <p className="text-sm text-muted leading-relaxed mb-8 max-w-sm mx-auto">
-            You&apos;ve told us who you were. Now let&apos;s look at where you are — without judgment.
-          </p>
-          <button
-            onClick={() => {
-              // Set a default slider value so this screen doesn't re-show
-              onChange(50);
-            }}
-            className="px-6 py-2.5 rounded-lg bg-accent text-background text-sm font-medium hover:bg-accent-soft transition-all"
-          >
-            Continue
-          </button>
-        </div>
+      <div className="w-full max-w-xl mx-auto px-4 text-center animate-in">
+        <div className="w-px h-10 bg-white/10 mx-auto mb-8" />
+        <p className="text-xs text-accent uppercase tracking-wider mb-4">Part 2 of 2</p>
+        <h2 className="text-2xl font-bold mb-3">Who are you now?</h2>
+        <p className="text-sm text-muted leading-relaxed mb-8 max-w-sm mx-auto">
+          You&apos;ve told us about before. Now let&apos;s look at where you are — no judgment.
+        </p>
+        <button onClick={() => onChange(50)} className="px-6 py-2.5 rounded-lg bg-accent text-background text-sm font-medium hover:bg-accent-soft transition-all">
+          Continue
+        </button>
       </div>
     );
   }
 
   return (
-    <div className={`w-full max-w-2xl mx-auto px-4 transition-all duration-300 ${animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}>
-      {/* Progress — minimal dots + number */}
-      <div className="mb-10">
+    <div className={`w-full max-w-3xl mx-auto px-4 transition-all duration-300 ${animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}>
+      {/* Progress dots */}
+      <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs text-muted/40">{currentIndex + 1}/{totalQuestions}</span>
-          <span className="text-xs text-muted/40">
-            {question.part === 1 ? "Who were you?" : "Who are you now?"}
-          </span>
+          <span className="text-xs text-muted/30">{currentIndex + 1} of {totalQuestions}</span>
+          <span className="text-xs text-muted/30">{question.part === 1 ? "Who were you?" : "Who are you now?"}</span>
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-0.5">
           {Array.from({ length: totalQuestions }).map((_, i) => (
-            <div
-              key={i}
-              className={`h-0.5 flex-1 rounded-full transition-all duration-500 ${
-                i < currentIndex ? "bg-accent" : i === currentIndex ? "bg-accent/60" : "bg-white/5"
-              }`}
-            />
+            <div key={i} className={`h-0.5 flex-1 rounded-full transition-all duration-500 ${i < currentIndex ? "bg-accent" : i === currentIndex ? "bg-accent/50" : "bg-white/5"}`} />
           ))}
         </div>
       </div>
 
       {/* Question */}
-      <h2 className="text-xl sm:text-2xl font-semibold leading-snug mb-8">{questionText}</h2>
+      <h2 className="text-xl sm:text-2xl font-bold leading-snug mb-2">{questionText}</h2>
+      {question.hint && <p className="text-sm text-muted/50 italic mb-6">{question.hint}</p>}
+      {!question.hint && <div className="mb-6" />}
 
-      {/* Input area */}
-      <div className="mb-8">
-        {/* OPEN TEXT */}
-        {question.type === "open_text" && (
-          <div>
-            <textarea
-              ref={textareaRef}
-              key={question.id}
-              value={textValue}
-              onChange={(e) => { setTextValue(e.target.value); onChange(e.target.value); }}
-              placeholder={question.placeholder}
-              rows={3}
-              className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-foreground text-lg placeholder:text-muted/20 focus:outline-none focus:border-accent/40 resize-none transition-colors"
-              style={{ lineHeight: "1.6" }}
-            />
-            <div className="flex justify-between mt-2">
-              <p className="text-xs text-muted/30">
-                {textValue.trim().length < 10 && textValue.length > 0
-                  ? `${10 - textValue.trim().length} more`
-                  : ""}
-              </p>
-              <p className="text-xs text-muted/20">{textValue.length > 0 ? `${textValue.length}` : ""}</p>
-            </div>
-          </div>
-        )}
-
-        {/* SINGLE CHOICE — cards that auto-advance */}
-        {question.type === "single_choice" && question.options && (
-          <div className="space-y-2">
-            {question.options.map((option, i) => (
+      {/* SINGLE CHOICE — CARD GRID */}
+      {question.type === "single_choice" && question.options && isGrid && (
+        <div className={`grid gap-2.5 mb-6 ${
+          question.options.length <= 4 ? "grid-cols-2" :
+          question.options.length <= 6 ? "grid-cols-2 sm:grid-cols-3" :
+          "grid-cols-2 sm:grid-cols-4"
+        }`}>
+          {question.options.map((option) => {
+            const selected = value === option.value;
+            return (
               <button
                 key={option.value}
-                onClick={() => handleSingleChoice(option.value)}
-                className={`w-full text-left px-4 py-3.5 rounded-lg border text-sm transition-all group ${
-                  value === option.value
-                    ? "bg-accent/10 border-accent/30 text-foreground"
-                    : "border-white/5 text-muted hover:border-white/10 hover:text-foreground"
+                onClick={() => handleAutoAdvance(option.value)}
+                className={`text-left p-4 rounded-xl border transition-all hover:scale-[1.02] active:scale-[0.98] ${
+                  selected
+                    ? "bg-accent/10 border-accent/30"
+                    : "bg-surface border-white/5 hover:border-white/10"
                 }`}
-                style={{ animationDelay: `${i * 50}ms` }}
               >
-                <span className={`inline-block w-5 text-xs ${value === option.value ? "text-accent" : "text-muted/30"}`}>
-                  {String.fromCharCode(65 + i)}
-                </span>
-                {option.label}
+                <span className="text-2xl block mb-2">{option.emoji}</span>
+                <p className="text-sm font-medium leading-tight">{option.label}</p>
+                {option.subtitle && (
+                  <p className="text-xs text-muted/50 mt-1 leading-snug">{option.subtitle}</p>
+                )}
               </button>
-            ))}
-          </div>
-        )}
+            );
+          })}
+        </div>
+      )}
 
-        {/* MULTI SELECT */}
-        {question.type === "multi_select" && question.options && (
-          <div className="space-y-2">
-            {question.options.map((option) => {
-              const selected = Array.isArray(value) && value.includes(option.value);
-              return (
-                <button
-                  key={option.value}
-                  onClick={() => {
-                    const current = Array.isArray(value) ? value : [];
-                    onChange(selected ? current.filter((v) => v !== option.value) : [...current, option.value]);
-                  }}
-                  className={`w-full text-left px-4 py-3 rounded-lg border text-sm transition-all flex items-center gap-3 ${
-                    selected
-                      ? "bg-accent/10 border-accent/30 text-foreground"
-                      : "border-white/5 text-muted hover:border-white/10 hover:text-foreground"
-                  }`}
-                >
-                  <span className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center text-[10px] transition-all ${
-                    selected ? "bg-accent border-accent text-background scale-110" : "border-white/15"
-                  }`}>
-                    {selected ? "\u2713" : ""}
-                  </span>
-                  {option.label}
-                </button>
-              );
-            })}
-            <p className="text-xs text-muted/30 mt-1">Select all that resonate</p>
-          </div>
-        )}
-
-        {/* SLIDER */}
-        {question.type === "slider" && (
-          <div className="pt-4">
-            <div className="relative mb-6">
-              <input
-                type="range"
-                min={question.sliderMin}
-                max={question.sliderMax}
-                value={typeof value === "number" ? value : 50}
-                onChange={(e) => onChange(Number(e.target.value))}
-                className="w-full h-1 bg-surface-light rounded-full appearance-none cursor-pointer accent-accent"
-              />
-              {/* Value indicator */}
-              <div
-                className="absolute -top-8 transform -translate-x-1/2 text-accent font-bold text-2xl tabular-nums transition-all"
-                style={{ left: `${typeof value === "number" ? value : 50}%` }}
-              >
-                {typeof value === "number" ? value : 50}
+      {/* SINGLE CHOICE — LIST (fallback) */}
+      {question.type === "single_choice" && question.options && !isGrid && (
+        <div className="space-y-2 mb-6">
+          {question.options.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => handleAutoAdvance(option.value)}
+              className={`w-full text-left px-4 py-3.5 rounded-xl border text-sm transition-all flex items-center gap-3 ${
+                value === option.value
+                  ? "bg-accent/10 border-accent/30 text-foreground"
+                  : "bg-surface border-white/5 text-muted hover:border-white/10 hover:text-foreground"
+              }`}
+            >
+              <span className="text-lg">{option.emoji}</span>
+              <div>
+                <span className="font-medium">{option.label}</span>
+                {option.subtitle && <span className="text-muted/50 ml-1.5">{option.subtitle}</span>}
               </div>
-            </div>
-            <div className="flex justify-between text-xs text-muted/40">
-              <span>{question.sliderMinLabel}</span>
-              <span>{question.sliderMaxLabel}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* MULTI SELECT — cards */}
+      {question.type === "multi_select" && question.options && (
+        <div className="space-y-2 mb-6">
+          {question.options.map((option) => {
+            const selected = Array.isArray(value) && value.includes(option.value);
+            return (
+              <button
+                key={option.value}
+                onClick={() => {
+                  const current = Array.isArray(value) ? value : [];
+                  onChange(selected ? current.filter((v) => v !== option.value) : [...current, option.value]);
+                }}
+                className={`w-full text-left px-4 py-3.5 rounded-xl border text-sm transition-all flex items-center gap-3 ${
+                  selected
+                    ? "bg-accent/10 border-accent/30 text-foreground"
+                    : "bg-surface border-white/5 text-muted hover:border-white/10 hover:text-foreground"
+                }`}
+              >
+                <span className="text-lg">{option.emoji}</span>
+                <span className="flex-1 font-medium">{option.label}</span>
+                <span className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center text-[10px] transition-all ${
+                  selected ? "bg-accent border-accent text-background scale-110" : "border-white/15"
+                }`}>
+                  {selected ? "\u2713" : ""}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* SLIDER */}
+      {question.type === "slider" && (
+        <div className="pt-6 mb-6">
+          <div className="relative mb-8">
+            <input
+              type="range"
+              min={question.sliderMin}
+              max={question.sliderMax}
+              value={typeof value === "number" ? value : 50}
+              onChange={(e) => onChange(Number(e.target.value))}
+              className="w-full h-1.5 bg-surface-light rounded-full appearance-none cursor-pointer accent-accent"
+            />
+            <div
+              className="absolute -top-10 transform -translate-x-1/2 text-accent font-bold text-3xl tabular-nums transition-all"
+              style={{ left: `${typeof value === "number" ? value : 50}%` }}
+            >
+              {typeof value === "number" ? value : 50}
             </div>
           </div>
-        )}
-      </div>
+          <div className="flex justify-between text-xs text-muted/30">
+            <span>{question.sliderMinLabel}</span>
+            <span>{question.sliderMaxLabel}</span>
+          </div>
+        </div>
+      )}
 
       {/* Navigation */}
       <div className="flex gap-3">
         {!isFirst && (
-          <button
-            onClick={onBack}
-            className="px-4 py-2.5 rounded-lg text-sm text-muted/40 hover:text-muted transition-colors"
-          >
+          <button onClick={onBack} className="px-4 py-2.5 rounded-lg text-sm text-muted/30 hover:text-muted transition-colors">
             Back
           </button>
         )}
-        {/* Only show continue for non-single-choice (those auto-advance) */}
-        {question.type !== "single_choice" && (
+        {/* Continue for multi-select and slider only */}
+        {(question.type === "multi_select" || question.type === "slider") && (
           <button
             onClick={handleNext}
             disabled={!isValid()}
             className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
               isValid()
                 ? "bg-accent text-background hover:bg-accent-soft"
-                : "bg-surface-light text-muted/20 cursor-not-allowed"
+                : "bg-surface-light text-muted/15 cursor-not-allowed"
             }`}
           >
             {isLast ? "See my results" : "Continue"}
           </button>
         )}
-        {/* For single choice, show a subtle "or press Continue" only if already selected */}
-        {question.type === "single_choice" && value && (
-          <button
-            onClick={handleNext}
-            className="flex-1 py-2.5 rounded-lg text-sm text-muted/30 hover:text-muted hover:bg-surface-light transition-all"
-          >
-            {isLast ? "See my results" : "Continue"}
-          </button>
-        )}
       </div>
-
-      {/* Keyboard hint */}
-      <p className="text-center text-[10px] text-muted/15 mt-6">
-        {question.type === "open_text" ? "" : ""}
-      </p>
     </div>
   );
 }

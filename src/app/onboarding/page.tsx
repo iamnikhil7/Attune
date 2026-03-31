@@ -42,8 +42,8 @@ export default function OnboardingPage() {
       return {
         questionId: Number(qid),
         responseType: q.type,
-        responseText: q.type === "open_text" ? (value as string) : undefined,
-        responseChoice: q.type !== "open_text" ? value : undefined,
+        responseText: undefined,
+        responseChoice: value,
       };
     });
 
