@@ -72,32 +72,30 @@ export default function OnboardingPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background">
-        <div className="w-10 h-10 border-2 border-accent/30 border-t-accent rounded-full animate-spin mb-4" />
-        <p className="text-muted text-sm">Analyzing your responses...</p>
+        <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin mb-4" />
+        <p className="text-muted text-sm">Finding your archetype...</p>
       </div>
     );
   }
 
   if (step === "sensitivity") return (
     <div className="min-h-screen flex items-center justify-center px-6 bg-background">
-      <div className="max-w-lg w-full">
-        <div className="p-6 sm:p-8 rounded-xl bg-surface border border-white/5">
-          <h2 className="text-xl font-bold mb-4">Before we begin</h2>
-          <p className="text-sm text-muted leading-relaxed mb-6">
-            Some of what we explore touches on food, body image, and health habits.
-            If any of these feel sensitive for you right now, that&apos;s completely okay.
-            This app is designed to support you, not add pressure.
-          </p>
-          <p className="text-sm font-medium mb-5">Do any of these areas feel difficult for you right now?</p>
-          <div className="space-y-2">
-            <button onClick={() => handleSensitivityChoice(false)} className="w-full text-left px-4 py-3 rounded-lg border border-white/10 bg-surface-light hover:border-accent/20 transition-colors text-sm">
-              No, I&apos;m good to continue
-            </button>
-            <button onClick={() => handleSensitivityChoice(true)} className="w-full text-left px-4 py-3 rounded-lg border border-white/10 bg-surface-light hover:border-accent/20 transition-colors text-sm">
-              Yes, some of these feel sensitive
-            </button>
-          </div>
+      <div className="max-w-md w-full animate-in">
+        <p className="text-xs text-muted/40 mb-8">Before we begin</p>
+        <p className="text-lg leading-relaxed mb-8">
+          Some of what we explore touches on food, body image, and health habits.
+          If any of these feel sensitive for you right now, that&apos;s completely okay.
+        </p>
+        <p className="text-sm text-muted mb-6">Do any of these feel difficult right now?</p>
+        <div className="space-y-2">
+          <button onClick={() => handleSensitivityChoice(false)} className="w-full text-left px-4 py-3.5 rounded-lg border border-white/5 text-sm hover:border-white/10 hover:text-foreground text-muted transition-colors">
+            No, I&apos;m good to continue
+          </button>
+          <button onClick={() => handleSensitivityChoice(true)} className="w-full text-left px-4 py-3.5 rounded-lg border border-white/5 text-sm hover:border-white/10 hover:text-foreground text-muted transition-colors">
+            Yes, some of these feel sensitive
+          </button>
         </div>
+        <p className="text-xs text-muted/20 mt-6">Either way, we&apos;ll adapt to you.</p>
       </div>
     </div>
   );
@@ -121,9 +119,10 @@ export default function OnboardingPage() {
 
   if (step === "goals") return (
     <div className="min-h-screen flex items-center justify-center py-12 px-6 bg-background">
-      <div className="max-w-2xl w-full">
-        <h2 className="text-2xl font-bold mb-2">Your goals</h2>
-        <p className="text-sm text-muted mb-8">Based on your responses. Toggle off any that don&apos;t resonate.</p>
+      <div className="max-w-2xl w-full animate-in">
+        <p className="text-xs text-accent uppercase tracking-wider mb-3">Part 3</p>
+        <h2 className="text-2xl font-bold mb-2">Here&apos;s what we think matters for you</h2>
+        <p className="text-sm text-muted mb-8">These aren&apos;t metrics. They&apos;re identity anchors. Remove any that don&apos;t feel right.</p>
         <div className="space-y-2 mb-8">
           {suggestedGoals.map((goal, i) => (
             <div key={i} className={`flex items-start gap-3 p-4 rounded-lg border transition-all ${activeGoals[i] ? "bg-accent/5 border-accent/15" : "bg-surface border-white/5 opacity-40"}`}>
@@ -143,10 +142,12 @@ export default function OnboardingPage() {
 
   if (step === "why") return (
     <div className="min-h-screen flex items-center justify-center py-12 px-6 bg-background">
-      <div className="max-w-2xl w-full">
-        <h2 className="text-2xl font-bold mb-2">Write your why</h2>
-        <p className="text-sm text-muted mb-1">In your own words. When you&apos;re about to override a pause, this is what you&apos;ll see.</p>
-        <p className="text-sm text-accent mb-6">Make it something only you would write.</p>
+      <div className="max-w-2xl w-full animate-in">
+        <p className="text-xs text-muted/40 mb-6">Last step</p>
+        <h2 className="text-2xl font-bold mb-2">Now write your why.</h2>
+        <p className="text-sm text-muted mb-6">
+          At 11pm, when you&apos;re reaching for the thing you said you wouldn&apos;t — these words will appear. Make them count.
+        </p>
         <textarea
           value={personalWhy}
           onChange={(e) => setPersonalWhy(e.target.value)}
