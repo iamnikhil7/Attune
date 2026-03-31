@@ -36,7 +36,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link href="/auth" className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-lg bg-accent text-background hover:bg-accent-soft transition-colors">
-              Start the questionnaire
+              Get started
             </Link>
             <a href="#how-it-works" className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-lg border border-white/10 text-foreground hover:bg-surface-light transition-colors">
               See how it works
@@ -210,14 +210,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-24 px-6">
+      {/* End note */}
+      <section className="py-20 px-6">
         <div className="max-w-lg mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Ready to start?</h2>
-          <p className="text-muted mb-8">The questionnaire takes 3 minutes. What it reveals might surprise you.</p>
-          <Link href="/auth" className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-lg bg-accent text-background hover:bg-accent-soft transition-colors">
-            Take the questionnaire
-          </Link>
+          <p className="text-muted text-sm">14 questions. 3 minutes. That&apos;s all it takes to start.</p>
         </div>
       </section>
 
