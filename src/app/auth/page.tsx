@@ -1,10 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 type AuthMode = "landing" | "login" | "signup";
+
+const insights = [
+  "The average person makes 35,000 decisions a day. Most of them happen on autopilot.",
+  "It takes 66 days to form a new habit — but only one moment of awareness to break an old one.",
+  "We don't lack willpower. We lack awareness of the exact moment we need it.",
+  "90% of our daily actions are habitual. The other 10% shape who we become.",
+  "The space between stimulus and response is where your freedom lives.",
+  "Your brain rewires itself every single day. The question is: who's directing the rewiring?",
+  "People who pause before acting are 4x more likely to align with their long-term goals.",
+  "Vulnerability isn't weakness — it's the birthplace of change.",
+];
 
 export default function AuthPage() {
   const router = useRouter();
@@ -14,6 +25,8 @@ export default function AuthPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
+  const [insightIndex, setInsightIndex] = useState(0);
+  const [insightFading, setInsightFading] = useState(false);
 
   useEffect(() => {
     async function checkSession() {
@@ -24,11 +37,8 @@ export default function AuthPage() {
           .select("onboarding_completed")
           .eq("id", user.id)
           .single();
-        if (data?.onboarding_completed) {
-          router.push("/dashboard");
-        } else {
-          router.push("/onboarding");
-        }
+        if (data?.onboarding_completed) { router.push("/dashboard"); }
+        else { router.push("/onboarding"); }
         return;
       }
       setCheckingSession(false);
@@ -36,19 +46,45 @@ export default function AuthPage() {
     checkSession();
   }, [router]);
 
-  const handleGetStarted = async () => {
+  // Rotate insights
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setInsightFading(true);
+      setTimeout(() => {
+        setInsightIndex((prev) => (prev + 1) % insights.length);
+        setInsightFading(false);
+      }, 500);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleGetStarted = useCallback(async () => {
     setLoading(true);
     setError("");
-    const { data, error: authError } = await supabase.auth.signInAnonymously();
-    if (authError) { setError(authError.message); setLoading(false); return; }
-    if (data.user) {
-      await supabase.from("users").upsert({
-        id: data.user.id, anonymous_id: data.user.id,
-        sensitivity_mode: false, onboarding_completed: false, account_linked: false,
-      });
+    try {
+      const { data, error: authError } = await supabase.auth.signInAnonymously();
+      if (authError) {
+        console.error("Anonymous auth error:", authError);
+        setError("Something went wrong. Please try creating an account instead.");
+        setLoading(false);
+        return;
+      }
+      if (data.user) {
+        await supabase.from("users").upsert({
+          id: data.user.id,
+          anonymous_id: data.user.id,
+          sensitivity_mode: false,
+          onboarding_completed: false,
+          account_linked: false,
+        });
+        router.push("/onboarding");
+      }
+    } catch (e) {
+      console.error("Auth error:", e);
+      setError("Connection issue. Please try again.");
+      setLoading(false);
     }
-    router.push("/onboarding");
-  };
+  }, [router]);
 
   const handleSignUp = async () => {
     if (!email || !password) { setError("Please fill in all fields."); return; }
@@ -80,45 +116,57 @@ export default function AuthPage() {
   if (checkingSession) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background">
-        <div className="w-12 h-12 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+        <div className="w-10 h-10 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 bg-background relative overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/3 left-1/3 w-[500px] h-[500px] bg-accent/8 rounded-full blur-3xl animate-breathe" />
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 bg-background relative overflow-hidden">
+      {/* Soft ambient glow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-accent/6 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 w-full max-w-sm">
+      <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
         {/* Logo */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent/15 mb-5">
-            <svg className="w-8 h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
-            </svg>
-          </div>
-          <h1 className="text-4xl font-bold tracking-tight mb-2">PAUSE</h1>
-          <p className="text-muted text-lg">Your behavioral intelligence layer</p>
+        <div className="w-14 h-14 rounded-2xl bg-accent/12 flex items-center justify-center mb-6">
+          <svg className="w-7 h-7 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+          </svg>
         </div>
 
-        {/* LANDING — clean, one CTA */}
+        <h1 className="text-4xl font-bold tracking-tight mb-2">PAUSE</h1>
+
+        {/* Rotating insight */}
+        <div className="h-16 flex items-center justify-center mb-10">
+          <p className={`text-center text-muted text-sm leading-relaxed max-w-xs transition-opacity duration-500 ${insightFading ? "opacity-0" : "opacity-100"}`}>
+            {insights[insightIndex]}
+          </p>
+        </div>
+
+        {/* LANDING */}
         {mode === "landing" && (
-          <div>
+          <div className="w-full">
+            {error && <p className="text-red-400 text-sm text-center mb-4">{error}</p>}
             <button
               onClick={handleGetStarted}
               disabled={loading}
-              className="w-full py-4 rounded-full bg-accent text-white font-semibold text-lg hover:bg-accent-soft transition-all disabled:opacity-50"
+              className="w-full py-4 rounded-full bg-accent text-white font-semibold text-lg hover:bg-accent-soft active:scale-[0.98] transition-all disabled:opacity-50"
             >
-              {loading ? "Starting..." : "Get Started"}
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  One moment...
+                </span>
+              ) : "Get Started"}
             </button>
-            <p className="text-center text-sm text-muted/50 mt-3">
-              No account needed
+            <p className="text-center text-xs text-muted/40 mt-3 mb-10">
+              14 questions. No account needed. Takes 3 minutes.
             </p>
-            <p className="text-center text-sm text-muted mt-8">
-              Already have an account?{" "}
-              <button onClick={() => setMode("login")} className="text-accent hover:text-accent-soft transition-colors">
+            <p className="text-center text-sm text-muted">
+              Returning?{" "}
+              <button onClick={() => setMode("login")} className="text-accent hover:text-accent-soft transition-colors font-medium">
                 Log in
               </button>
             </p>
@@ -127,28 +175,19 @@ export default function AuthPage() {
 
         {/* LOGIN */}
         {mode === "login" && (
-          <div>
+          <div className="w-full">
             <div className="p-6 rounded-2xl bg-surface border border-white/5">
-              <h2 className="text-xl font-semibold mb-5">Welcome back</h2>
-              <div className="space-y-4">
-                <input
-                  type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
-                  className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/50 transition-colors"
-                />
-                <input
-                  type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-                  className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/50 transition-colors"
-                />
+              <h2 className="text-lg font-semibold mb-5">Welcome back</h2>
+              <div className="space-y-3">
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors" />
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onKeyDown={(e) => e.key === "Enter" && handleLogin()} className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors" />
                 {error && <p className="text-red-400 text-sm">{error}</p>}
                 <button onClick={handleLogin} disabled={loading} className="w-full py-3 rounded-full bg-accent text-white font-semibold hover:bg-accent-soft transition-all disabled:opacity-50">
                   {loading ? "Logging in..." : "Log In"}
                 </button>
               </div>
             </div>
-            <div className="flex justify-center gap-4 mt-5 text-sm">
+            <div className="flex justify-center gap-3 mt-5 text-sm">
               <button onClick={() => { setMode("landing"); setError(""); }} className="text-muted hover:text-foreground transition-colors">Back</button>
               <span className="text-white/10">|</span>
               <button onClick={() => { setMode("signup"); setError(""); }} className="text-accent hover:text-accent-soft transition-colors">Create account</button>
@@ -158,31 +197,22 @@ export default function AuthPage() {
 
         {/* SIGNUP */}
         {mode === "signup" && (
-          <div>
+          <div className="w-full">
             <div className="p-6 rounded-2xl bg-surface border border-white/5">
-              <h2 className="text-xl font-semibold mb-5">Create your account</h2>
-              <div className="space-y-4">
-                <input
-                  type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
-                  className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/50 transition-colors"
-                />
-                <input
-                  type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password (min 6 characters)"
-                  onKeyDown={(e) => e.key === "Enter" && handleSignUp()}
-                  className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/50 transition-colors"
-                />
+              <h2 className="text-lg font-semibold mb-5">Create your account</h2>
+              <div className="space-y-3">
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors" />
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 6 characters)" onKeyDown={(e) => e.key === "Enter" && handleSignUp()} className="w-full bg-surface-light border border-white/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors" />
                 {error && <p className="text-red-400 text-sm">{error}</p>}
                 <button onClick={handleSignUp} disabled={loading} className="w-full py-3 rounded-full bg-accent text-white font-semibold hover:bg-accent-soft transition-all disabled:opacity-50">
                   {loading ? "Creating..." : "Create Account"}
                 </button>
               </div>
-              <button onClick={handleGetStarted} disabled={loading} className="w-full mt-4 py-2 text-sm text-muted hover:text-foreground transition-colors">
+              <button onClick={handleGetStarted} disabled={loading} className="w-full mt-3 py-2 text-sm text-muted hover:text-foreground transition-colors">
                 or start without an account
               </button>
             </div>
-            <div className="flex justify-center gap-4 mt-5 text-sm">
+            <div className="flex justify-center gap-3 mt-5 text-sm">
               <button onClick={() => { setMode("landing"); setError(""); }} className="text-muted hover:text-foreground transition-colors">Back</button>
               <span className="text-white/10">|</span>
               <button onClick={() => { setMode("login"); setError(""); }} className="text-accent hover:text-accent-soft transition-colors">Log in instead</button>
