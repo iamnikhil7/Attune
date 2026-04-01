@@ -555,7 +555,7 @@ export default function PausePage() {
           <div className="p-5 rounded-2xl bg-surface border border-border mb-6">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[0.625rem] uppercase tracking-wider text-muted/30">Connected Apps</p>
-              <button className="text-xs text-pause-orange hover:opacity-80 transition-colors">Manage</button>
+              <button onClick={() => setPhase("connect_apps")} className="text-xs text-pause-orange hover:opacity-80 transition-colors">Manage</button>
             </div>
             <div className="flex flex-wrap gap-2">
               {connectedAppNames.length > 0 ? connectedAppNames.map((app) => (
