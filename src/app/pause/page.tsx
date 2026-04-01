@@ -16,6 +16,51 @@ const hexToColorName: Record<string, string> = {
   "#3AE8A8": "teal", "#E8D43A": "yellow", "#FF6B6B": "red", "#6BE8A0": "green",
 };
 
+const APP_CATEGORIES = [
+  {
+    id: "health", label: "Health Trackers", sub: "Movement, sleep, and recovery data",
+    apps: [
+      { id: "apple_health", name: "Apple Health", desc: "Steps, heart rate, activity rings", badge: "safe", badgeColor: "#6BE8A0" },
+      { id: "whoop", name: "Whoop", desc: "Sleep score, HRV, recovery", badge: "safe", badgeColor: "#6BE8A0" },
+      { id: "oura", name: "Oura", desc: "Sleep, readiness, activity", badge: "safe", badgeColor: "#6BE8A0" },
+      { id: "strava", name: "Strava", desc: "Workouts, runs, cycling", badge: "safe", badgeColor: "#6BE8A0" },
+    ],
+  },
+  {
+    id: "delivery", label: "Delivery & Food", sub: "Order patterns and timing",
+    apps: [
+      { id: "doordash", name: "DoorDash", desc: "Order history, time of orders", badge: "trigger", badgeColor: "#E85D3A" },
+      { id: "ubereats", name: "UberEats", desc: "Order history, time of orders", badge: "trigger", badgeColor: "#E85D3A" },
+      { id: "instacart", name: "Instacart", desc: "Order patterns, grocery habits", badge: "watch", badgeColor: "#E8A83A" },
+    ],
+  },
+  {
+    id: "social", label: "Social & Screen", sub: "Screen time and attention patterns",
+    apps: [
+      { id: "instagram", name: "Instagram", desc: "Usage time, session data", badge: "trigger", badgeColor: "#E85D3A" },
+      { id: "tiktok", name: "TikTok", desc: "Watch time, session data", badge: "trigger", badgeColor: "#E85D3A" },
+      { id: "youtube", name: "YouTube", desc: "Watch time, session data", badge: "watch", badgeColor: "#E8A83A" },
+    ],
+  },
+  {
+    id: "spending", label: "Spending", sub: "Purchase patterns and impulse buying",
+    apps: [
+      { id: "bank", name: "Bank (via Plaid)", desc: "Transaction patterns", badge: "watch", badgeColor: "#E8A83A" },
+      { id: "amazon", name: "Amazon", desc: "Order history, patterns", badge: "trigger", badgeColor: "#E85D3A" },
+    ],
+  },
+];
+
+const AMBIENT_CATEGORIES = [
+  { id: "movement", label: "Movement" },
+  { id: "nutrition", label: "Nutrition" },
+  { id: "screen_time", label: "Screen Time" },
+  { id: "sleep", label: "Sleep" },
+  { id: "spending", label: "Spending" },
+  { id: "social", label: "Social" },
+  { id: "work_stress", label: "Work Stress" },
+];
+
 export default function PausePage() {
   const [phase, setPhase] = useState<Phase>("intro");
   const [sensitivityChoice, setSensitivityChoice] = useState<string | null>(null);
@@ -28,12 +73,23 @@ export default function PausePage() {
   const [activeGoals, setActiveGoals] = useState<boolean[]>([]);
   const [priorities, setPriorities] = useState<Set<string>>(new Set());
   const [connectedApps, setConnectedApps] = useState<Set<string>>(new Set());
+  const [problemApps, setProblemApps] = useState<Set<string>>(new Set());
+  const [flagExpanded, setFlagExpanded] = useState(false);
   const [points, setPoints] = useState(0);
   const [resisted, setResisted] = useState(0);
   const [totalPauses, setTotalPauses] = useState(0);
   const [outcome, setOutcome] = useState<"resisted" | "overrode" | "modified" | null>(null);
   const [overrideCount, setOverrideCount] = useState(0);
   const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    if (phase === "reveal") {
+      const t = setTimeout(() => setRevealed(true), 300);
+      return () => clearTimeout(t);
+    } else {
+      setRevealed(false);
+    }
+  }, [phase]);
 
   const q = pauseQuestions[qIndex];
 
@@ -319,94 +375,233 @@ export default function PausePage() {
   );
 
   // ===== CONNECT APPS =====
-  if (phase === "connect_apps") return (
-    <div className="min-h-screen bg-background"><Navbar />
-      <div className="max-w-sm mx-auto px-6 pt-24 pb-16 animate-in">
-        <h2 className="text-2xl mb-2">Connect your apps</h2>
-        <p className="text-sm text-muted/50 mb-8">Optional — you can skip or come back later.</p>
-        <div className="space-y-3 mb-8">
-          {[
-            { id: "health", label: "Health Trackers", apps: "Apple Health, Whoop, Oura" },
-            { id: "delivery", label: "Food Delivery", apps: "DoorDash, UberEats, Instacart" },
-            { id: "social", label: "Social & Screen", apps: "Instagram, TikTok, YouTube" },
-            { id: "spending", label: "Spending", apps: "Bank accounts, Amazon" },
-          ].map((cat) => {
-            const active = connectedApps.has(cat.id);
-            return (
-              <button key={cat.id} onClick={() => setConnectedApps((prev) => { const n = new Set(prev); n.has(cat.id) ? n.delete(cat.id) : n.add(cat.id); return n; })} className={`w-full text-left px-5 py-4 rounded-2xl border transition-all card-hover hover:scale-[1.01] ${active ? "border-pause-orange/30 bg-pause-orange/[0.07]" : "border-border hover:border-white/10"}`}>
-                <p className="text-sm font-medium flex items-center gap-2">{cat.label} {active && <span className="text-[0.625rem] bg-pause-orange/20 text-pause-orange px-2 py-0.5 rounded-full">Connected</span>}</p>
-                <p className="text-xs text-muted/40 mt-0.5">{cat.apps}</p>
-              </button>
-            );
-          })}
-        </div>
-        <button onClick={() => setPhase("dashboard")} className="w-full py-3.5 rounded-full text-sm font-medium tracking-wide hover:opacity-90 transition-all" style={{ background: "#E85D3A", color: "#0A0A0F" }}>
-          Start observing
-        </button>
-      </div>
-    </div>
-  );
+  if (phase === "connect_apps") {
+    const connectedCount = connectedApps.size;
+    const connectedAppNames = APP_CATEGORIES.flatMap(c => c.apps).filter(a => connectedApps.has(a.id));
+    return (
+      <div className="min-h-screen bg-background"><Navbar />
+        <div className="max-w-xl mx-auto px-6 pt-24 pb-16 animate-in">
+          <h2 className="text-2xl mb-2">Connect your apps</h2>
+          <p className="text-sm text-muted/50 mb-10">PAUSE uses data from your apps to learn your patterns. Connect what you&apos;re comfortable with — you can always change this later.</p>
 
-  // ===== DASHBOARD =====
-  if (phase === "dashboard") return (
-    <div className="min-h-screen bg-background"><Navbar />
-      <div className="max-w-lg mx-auto px-6 pt-24 pb-16">
-        <div className="flex items-center gap-4 mb-8">
-          <Avatar archetypeColor={avatarColor} state={resisted > 3 ? "glowing" : resisted > 0 ? "celebrating" : "neutral"} size="md" />
-          <div>
-            <p className="text-lg" style={{ color: archetype?.color }}>{archetype?.name}</p>
-            <p className="text-xs text-muted/40">{points} points · {resisted} resisted</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-2 mb-6">
-          {[{ v: points, l: "Points", c: "#E85D3A" }, { v: resisted, l: "Resisted", c: "#6BE8A0" }, { v: totalPauses, l: "Pauses", c: undefined }].map((s) => (
-            <div key={s.l} className="p-3 rounded-2xl bg-surface border border-border text-center">
-              <p className="text-lg font-semibold" style={s.c ? { color: s.c } : {}}>{s.v}</p>
-              <p className="text-[0.625rem] text-muted/30">{s.l}</p>
+          {APP_CATEGORIES.map((cat) => (
+            <div key={cat.id} className="mb-8">
+              <p className="text-sm font-semibold mb-1">{cat.label}</p>
+              <p className="text-xs text-muted/40 mb-3">{cat.sub}</p>
+              <div className="space-y-2">
+                {cat.apps.map((app) => {
+                  const active = connectedApps.has(app.id);
+                  return (
+                    <button key={app.id} onClick={() => setConnectedApps((prev) => { const n = new Set(prev); n.has(app.id) ? n.delete(app.id) : n.add(app.id); return n; })} className={`w-full text-left px-5 py-4 rounded-2xl border transition-all ${active ? "border-white/15 bg-white/[0.04]" : "border-border hover:border-white/10"}`}>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium flex items-center gap-2">
+                            {app.name}
+                            <span className="text-[0.6rem] px-2 py-0.5 rounded-full font-medium" style={{ background: `${app.badgeColor}20`, color: app.badgeColor }}>{app.badge}</span>
+                          </p>
+                          <p className="text-xs text-muted/40 mt-0.5">{app.desc}</p>
+                        </div>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${active ? "border-pause-orange bg-pause-orange" : "border-white/15"}`}>
+                          {active && <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 4" stroke="#0A0A0F" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           ))}
-        </div>
 
-        {personalWhy && (
-          <div className="p-5 rounded-2xl bg-surface border border-border mb-6">
-            <p className="text-[0.625rem] uppercase tracking-wider text-muted/30 mb-2">Your why</p>
-            <p className="serif text-foreground/90">&ldquo;{personalWhy}&rdquo;</p>
-          </div>
-        )}
+          {/* Flag problem apps */}
+          {connectedCount > 0 && (
+            <div className="p-5 rounded-2xl border border-border bg-surface mb-8">
+              <button onClick={() => setFlagExpanded(!flagExpanded)} className="w-full flex items-center justify-between">
+                <div className="text-left">
+                  <p className="text-sm font-semibold">Flag your problem apps</p>
+                  <p className="text-xs text-muted/40 mt-0.5">Which connected apps do you consider your problem apps? These will be monitored more closely.</p>
+                </div>
+                <span className={`text-muted/30 transition-transform ${flagExpanded ? "rotate-180" : ""}`}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                </span>
+              </button>
+              {flagExpanded && (
+                <div className="mt-4 space-y-2">
+                  {connectedAppNames.map((app) => (
+                    <button key={app.id} onClick={() => setProblemApps((prev) => { const n = new Set(prev); n.has(app.id) ? n.delete(app.id) : n.add(app.id); return n; })} className={`w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 transition-all ${problemApps.has(app.id) ? "bg-white/[0.06]" : "bg-white/[0.02] hover:bg-white/[0.04]"}`}>
+                      <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-all ${problemApps.has(app.id) ? "border-pause-orange bg-pause-orange" : "border-white/20"}`}>
+                        {problemApps.has(app.id) && <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 4" stroke="#0A0A0F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                      </div>
+                      <span className="text-sm text-muted/70">{app.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
-        <div className="p-4 rounded-2xl bg-surface border border-border mb-6">
-          <div className="flex justify-between text-xs text-muted/30 mb-2"><span>Graduation</span><span>{points} / 200</span></div>
-          <div className="w-full h-1 bg-white/[0.03] rounded-full overflow-hidden">
-            <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, (points / 200) * 100)}%`, background: "#E85D3A" }} />
-          </div>
-        </div>
-
-        <button onClick={() => { setOutcome(null); setPhase("your_why"); }} className="w-full py-3.5 rounded-full border text-sm font-medium tracking-wide transition-all card-hover" style={{ borderColor: "rgba(232,93,58,0.15)", color: "#E85D3A" }}>
-          Simulate a Pause
-        </button>
-
-        <div className="mt-8 text-center">
-          <Link href="/" className="text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
+          <button onClick={() => setPhase("dashboard")} className="w-full py-3.5 rounded-full text-sm font-medium tracking-wide hover:opacity-90 transition-all" style={{ background: "#E8A83A", color: "#0A0A0F" }}>
+            {connectedCount > 0 ? `Continue with ${connectedCount} app${connectedCount > 1 ? "s" : ""}` : "Skip for now"}
+          </button>
+          <p className="text-xs text-muted/30 text-center mt-3">You can connect apps anytime from settings.</p>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // ===== DASHBOARD =====
+  if (phase === "dashboard") {
+    const connectedAppNames = APP_CATEGORIES.flatMap(c => c.apps).filter(a => connectedApps.has(a.id));
+    const selectedGoals = suggestedGoals.filter((_, i) => activeGoals[i]);
+    const priorityLabels: Record<string, string> = { physical: "Physical Health", nutrition: "Nutritional Health", digital: "Digital Wellness" };
+    const activeAmbient = new Set<string>();
+    if (connectedApps.has("apple_health") || connectedApps.has("whoop") || connectedApps.has("oura") || connectedApps.has("strava")) { activeAmbient.add("movement"); activeAmbient.add("sleep"); }
+    if (connectedApps.has("doordash") || connectedApps.has("ubereats") || connectedApps.has("instacart")) activeAmbient.add("nutrition");
+    if (connectedApps.has("instagram") || connectedApps.has("tiktok") || connectedApps.has("youtube")) activeAmbient.add("screen_time");
+
+    return (
+      <div className="min-h-screen bg-background"><Navbar />
+        <div className="max-w-xl mx-auto px-6 pt-20 pb-16">
+          {/* Top bar */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-2">
+              <span className="text-pause-orange text-lg">⏸</span>
+              <span className="text-sm font-semibold tracking-wide">PAUSE</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-xs text-muted/40">Progress</span>
+              <span className="text-xs flex items-center gap-1.5" style={{ color: archetype?.color }}>
+                <Avatar archetypeColor={avatarColor} state="neutral" size="sm" />
+                {archetype?.name}
+              </span>
+            </div>
+          </div>
+
+          {/* Stats row */}
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            {[{ v: points, l: "Points", c: "#6BE8A0" }, { v: resisted, l: "Resisted", c: "#6BE8A0" }, { v: totalPauses, l: "Total pauses", c: "#6BE8A0" }].map((s) => (
+              <div key={s.l} className="p-4 rounded-2xl bg-surface border border-border text-center">
+                <p className="text-xl font-semibold" style={{ color: s.c }}>{s.v}</p>
+                <p className="text-[0.65rem] text-muted/40 mt-1">{s.l}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Observation phase */}
+          <div className="p-5 rounded-2xl bg-surface border border-border mb-6">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-[#E8A83A]" />
+              <p className="text-sm font-semibold">Observation phase</p>
+            </div>
+            <p className="text-xs text-muted/50 leading-relaxed mb-4">PAUSE is learning your patterns. During this phase, you can trigger a demo pause to see how it works.</p>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex-1 h-1.5 bg-white/[0.04] rounded-full overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: "14%", background: "#E8A83A" }} />
+              </div>
+              <span className="text-xs text-muted/40 flex-shrink-0">Day 1 of 7</span>
+            </div>
+            <button onClick={() => { setOutcome(null); setPhase("your_why"); }} className="w-full py-3 rounded-xl text-sm font-medium tracking-wide transition-all border border-pause-orange/20 hover:bg-pause-orange/[0.05]" style={{ color: "#E85D3A" }}>
+              Try a demo pause
+            </button>
+          </div>
+
+          {/* Your Why card */}
+          {personalWhy && (
+            <div className="p-5 rounded-2xl bg-surface border border-border mb-6">
+              <p className="text-[0.625rem] uppercase tracking-wider text-muted/30 mb-3">Your Why</p>
+              <p className="serif text-lg text-foreground/90 italic">&ldquo;{personalWhy}&rdquo;</p>
+            </div>
+          )}
+
+          {/* Priorities + Goals side by side */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="p-5 rounded-2xl bg-surface border border-border">
+              <p className="text-[0.625rem] uppercase tracking-wider text-muted/30 mb-3">Priorities</p>
+              <div className="space-y-2">
+                {Array.from(priorities).map((p) => (
+                  <p key={p} className="text-sm flex items-center gap-2" style={{ color: "#E85D3A" }}>
+                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#E85D3A" }} />
+                    {priorityLabels[p] || p}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div className="p-5 rounded-2xl bg-surface border border-border">
+              <p className="text-[0.625rem] uppercase tracking-wider text-muted/30 mb-3">Goals</p>
+              <div className="space-y-2">
+                {selectedGoals.slice(0, 4).map((g, i) => (
+                  <p key={i} className="text-xs text-muted/60 leading-relaxed">· {g}</p>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Ambient Sensing */}
+          <div className="p-5 rounded-2xl bg-surface border border-border mb-6">
+            <p className="text-[0.625rem] uppercase tracking-wider text-muted/30 mb-4">Ambient Sensing</p>
+            <div className="grid grid-cols-4 gap-2">
+              {AMBIENT_CATEGORIES.map((cat) => {
+                const isActive = activeAmbient.has(cat.id);
+                return (
+                  <div key={cat.id} className={`p-3 rounded-xl text-center border transition-all ${isActive ? "border-white/10 bg-white/[0.03]" : "border-border bg-white/[0.01]"}`}>
+                    <p className={`text-xs font-medium ${isActive ? "text-pause-orange" : "text-muted/40"}`}>{cat.label}</p>
+                    <p className={`text-[0.6rem] mt-0.5 ${isActive ? "text-muted/50" : "text-muted/20"}`}>{isActive ? "Active" : "Pending"}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Connected Apps */}
+          <div className="p-5 rounded-2xl bg-surface border border-border mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[0.625rem] uppercase tracking-wider text-muted/30">Connected Apps</p>
+              <button className="text-xs text-pause-orange hover:opacity-80 transition-colors">Manage</button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {connectedAppNames.length > 0 ? connectedAppNames.map((app) => (
+                <span key={app.id} className="px-3 py-1.5 rounded-full text-xs border border-border text-muted/50">{app.name}</span>
+              )) : (
+                <p className="text-xs text-muted/20">No apps connected yet</p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-4 text-center">
+            <Link href="/" className="text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ===== YOUR WHY =====
   if (phase === "your_why") return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6"><Navbar />
-      <div className="max-w-sm text-center animate-in">
-        <div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="concerned" size="md" /></div>
-        <p className="text-[0.625rem] uppercase tracking-widest text-muted/30 mb-4">You said this mattered</p>
-        <p className="text-2xl leading-relaxed mb-6">&ldquo;{personalWhy}&rdquo;</p>
-        <p className="text-sm mb-10" style={{ color: archetype?.color }}>Pattern detected · Recurring moment</p>
-        <div className="space-y-2.5 w-full">
-          <button onClick={handleResist} className="w-full py-3 rounded-full text-sm font-medium transition-all card-hover" style={{ background: "rgba(107,232,160,0.08)", color: "#6BE8A0" }}>I'll resist</button>
-          <button onClick={handleModify} className="w-full py-3 rounded-full border text-sm font-medium transition-all card-hover" style={{ borderColor: "rgba(232,168,58,0.15)", color: "rgba(232,168,58,0.7)" }}>Modify choice</button>
-          <button onClick={handleOverride} className="w-full py-3 rounded-full text-sm text-muted/20 hover:text-muted/40 transition-colors card-hover">Override</button>
+      <div className="max-w-md w-full text-center animate-in">
+        <p className="text-[0.625rem] uppercase tracking-[0.25em] text-muted/30 mb-6">Layer 02 — Your Why</p>
+
+        <p className="text-lg leading-relaxed mb-8" style={{ color: "#E8A83A" }}>
+          You&apos;ve been scrolling for 28 minutes. This is usually when the pattern starts.
+        </p>
+
+        <div className="p-6 rounded-2xl bg-surface border border-border mb-10">
+          <p className="serif text-xl text-foreground/90 italic leading-relaxed">&ldquo;{personalWhy}&rdquo;</p>
+          <p className="text-xs text-muted/30 mt-3">— You wrote this</p>
         </div>
-        <button onClick={() => setPhase("dashboard")} className="mt-6 text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to dashboard</button>
+
+        <div className="space-y-3 w-full">
+          <button onClick={handleResist} className="w-full py-4 rounded-2xl text-sm font-medium tracking-wide transition-all card-hover" style={{ background: "rgba(107,232,160,0.12)", color: "#6BE8A0" }}>
+            I&apos;m going to resist
+          </button>
+          <button onClick={handleModify} className="w-full py-4 rounded-2xl text-sm font-medium tracking-wide transition-all card-hover" style={{ background: "rgba(232,168,58,0.12)", color: "#E8A83A" }}>
+            I&apos;ll modify what I was going to do
+          </button>
+          <button onClick={handleOverride} className="w-full py-4 rounded-2xl text-sm transition-all card-hover bg-white/[0.03] text-muted/30 hover:text-muted/50">
+            I&apos;m going to proceed anyway
+          </button>
+        </div>
+
+        <button onClick={() => setPhase("dashboard")} className="mt-8 text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to dashboard</button>
       </div>
     </div>
   );
