@@ -3,21 +3,21 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Avatar from "@/components/Avatar";
+import Link from "next/link";
 import { pauseQuestions } from "@/lib/pause/questions";
 import { scoreArchetype, type PauseArchetype } from "@/lib/pause/archetypes";
 
-type Phase = "intro" | "safety" | "onboarding" | "reveal" | "priorities" | "dashboard" | "your_why" | "witness" | "result";
+type Phase = "intro" | "safety" | "safety_confirm" | "onboarding" | "reveal" | "priorities" | "dashboard" | "your_why" | "witness" | "result";
 
-// Map archetype color hex to Avatar color name
 const hexToColorName: Record<string, string> = {
   "#E85D3A": "orange", "#3A8FE8": "green", "#E8A83A": "amber",
   "#C23AE8": "pink", "#3A3AE8": "indigo", "#E83A6F": "rose",
-  "#3AE8A8": "teal", "#E8D43A": "yellow", "#FF6B6B": "rose",
-  "#6BE8A0": "teal",
+  "#3AE8A8": "teal", "#E8D43A": "yellow", "#FF6B6B": "rose", "#6BE8A0": "teal",
 };
 
 export default function PausePage() {
   const [phase, setPhase] = useState<Phase>("intro");
+  const [sensitivityChoice, setSensitivityChoice] = useState<string | null>(null);
   const [qIndex, setQIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
   const [personalWhy, setPersonalWhy] = useState("");
@@ -52,11 +52,7 @@ export default function PausePage() {
   };
 
   const finishOnboarding = () => {
-    const a = scoreArchetype(
-      (answers[1] as string) || "",
-      (answers[2] as string) || "",
-      (answers[3] as string[]) || []
-    );
+    const a = scoreArchetype((answers[1] as string) || "", (answers[2] as string) || "", (answers[3] as string[]) || []);
     setArchetype(a);
     setAvatarColor(hexToColorName[a.color] || "teal");
     setPhase("reveal");
@@ -83,31 +79,64 @@ export default function PausePage() {
   if (phase === "intro") return (
     <div className="min-h-screen bg-background"><Navbar />
       <div className="min-h-screen flex items-center justify-center px-6 pt-16">
-        <div className="max-w-md text-center animate-in">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted mb-8">Behavioral Intelligence</p>
+        <div className="max-w-sm text-center animate-in">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-muted/40 mb-8">Behavioral Intelligence</p>
           <h1 className="font-serif text-4xl sm:text-5xl italic leading-[1.15] mb-6" style={{ color: "#E85D3A" }}>PAUSE</h1>
           <p className="text-lg text-foreground/90 mb-2">You don&apos;t need more willpower.</p>
-          <p className="text-muted text-sm mb-12">You need awareness at the right moment.</p>
+          <p className="text-muted/50 text-sm mb-12">You need awareness at the right moment.</p>
           <button onClick={() => setPhase("safety")} className="px-8 py-3.5 rounded-full text-sm font-medium tracking-wide transition-all hover:opacity-90" style={{ background: "#E85D3A", color: "#0A0A0F" }}>
             Begin
           </button>
+          <div className="mt-8">
+            <Link href="/" className="text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
+          </div>
         </div>
       </div>
     </div>
   );
 
-  // ===== SAFETY =====
+  // ===== SAFETY GATE =====
   if (phase === "safety") return (
     <div className="min-h-screen bg-background"><Navbar />
       <div className="min-h-screen flex items-center justify-center px-6 pt-16">
         <div className="max-w-sm animate-in">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted mb-6">Before we begin</p>
-          <p className="font-serif text-xl leading-relaxed mb-8">Some of what we explore touches on food, body image, and health habits.</p>
-          <p className="text-sm text-muted mb-6">Do any of these feel sensitive right now?</p>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-muted/40 mb-6">Before we begin</p>
+          <p className="font-serif text-xl italic leading-relaxed mb-6 text-foreground/90">Some of what we explore touches on food, body image, and health habits.</p>
+          <p className="text-sm text-muted/50 mb-6">Do any of these feel sensitive right now?</p>
           <div className="space-y-2">
-            <button onClick={() => setPhase("onboarding")} className="w-full text-left px-5 py-3.5 rounded-xl border border-border text-sm hover:border-white/15 transition-colors">Yes, please be gentle</button>
-            <button onClick={() => setPhase("onboarding")} className="w-full text-left px-5 py-3.5 rounded-xl border border-border text-sm hover:border-white/15 transition-colors">I&apos;m okay — continue</button>
+            <button onClick={() => { setSensitivityChoice("gentle"); setPhase("safety_confirm"); }} className={`w-full text-left px-5 py-4 rounded-2xl border text-sm transition-all ${sensitivityChoice === "gentle" ? "border-pause-orange/30 bg-pause-orange/[0.05]" : "border-border hover:border-white/10"}`}>
+              Yes, please be gentle
+            </button>
+            <button onClick={() => { setSensitivityChoice("okay"); setPhase("safety_confirm"); }} className={`w-full text-left px-5 py-4 rounded-2xl border text-sm transition-all ${sensitivityChoice === "okay" ? "border-pause-orange/30 bg-pause-orange/[0.05]" : "border-border hover:border-white/10"}`}>
+              I&apos;m okay — continue
+            </button>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ===== SAFETY CONFIRMATION =====
+  if (phase === "safety_confirm") return (
+    <div className="min-h-screen bg-background"><Navbar />
+      <div className="min-h-screen flex items-center justify-center px-6 pt-16">
+        <div className="max-w-sm animate-in">
+          {/* Notification-style confirmation */}
+          <div className="p-5 rounded-2xl border border-border bg-surface mb-6">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-muted/40 mb-3">Attune</p>
+            <p className="text-sm text-foreground/80 leading-relaxed">
+              {sensitivityChoice === "gentle"
+                ? "We'll use softer language throughout. You can change this anytime. Nothing here is meant to pressure you."
+                : "Great. We'll proceed normally. If anything feels off at any point, you can always go back."
+              }
+            </p>
+          </div>
+          <button onClick={() => setPhase("onboarding")} className="w-full py-3.5 rounded-full text-sm font-medium tracking-wide hover:opacity-90 transition-all" style={{ background: "#E85D3A", color: "#0A0A0F" }}>
+            Continue to questions
+          </button>
+          <button onClick={() => setPhase("safety")} className="w-full mt-3 py-2 text-[11px] text-muted/30 hover:text-muted/50 transition-colors">
+            Go back
+          </button>
         </div>
       </div>
     </div>
@@ -173,21 +202,26 @@ export default function PausePage() {
             </button>
           </>
         )}
+
+        {/* Back button for questions */}
+        {qIndex > 0 && (
+          <button onClick={() => setQIndex((i) => i - 1)} className="mt-4 text-[11px] text-muted/20 hover:text-muted/40 transition-colors">
+            &larr; Previous question
+          </button>
+        )}
       </div>
     </div>
   );
 
-  // ===== ARCHETYPE REVEAL (with animated avatar) =====
+  // ===== ARCHETYPE REVEAL (with avatar + trigger points) =====
   if (phase === "reveal" && archetype) return (
     <div className="min-h-screen bg-background"><Navbar />
       <div className="max-w-md mx-auto px-6 pt-24 pb-16 text-center">
         <div className={`transition-all duration-1000 ${revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          {/* Animated Avatar */}
           <div className="mb-6 flex justify-center">
             <Avatar archetypeColor={avatarColor} state={revealed ? "celebrating" : "neutral"} size="xl" />
           </div>
 
-          {/* Wellness ring */}
           <div className="relative w-24 h-24 mx-auto mb-6">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
               <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="5" />
@@ -195,25 +229,48 @@ export default function PausePage() {
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-lg font-semibold">{archetype.baseline}%</span>
-              <span className="text-[9px] text-muted">baseline</span>
+              <span className="text-[9px] text-muted/40">baseline</span>
             </div>
           </div>
 
           <h1 className="font-serif text-3xl italic mb-3" style={{ color: archetype.color }}>{archetype.name}</h1>
-          <p className="text-sm text-muted leading-relaxed mb-6 max-w-xs mx-auto">{archetype.description}</p>
+          <p className="text-sm text-muted/70 leading-relaxed mb-6 max-w-xs mx-auto">{archetype.description}</p>
 
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+          {/* Traits */}
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
             {archetype.traits.map((t) => (
-              <span key={t} className="px-3 py-1 rounded-full text-[11px] border border-border text-muted/60">{t}</span>
+              <span key={t} className="px-3 py-1 rounded-full text-[11px] border border-border text-muted/50">{t}</span>
             ))}
           </div>
 
+          {/* Trigger Points — what to watch for */}
+          <div className="p-4 rounded-2xl bg-surface border border-border mb-6 text-left">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-3">Watch for these patterns</p>
+            <div className="space-y-2">
+              {archetype.traits.map((t, i) => (
+                <p key={i} className="text-[12px] text-muted/50 flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full shrink-0" style={{ background: archetype.color }} />
+                  {t}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          {/* Your Why */}
           {personalWhy && (
             <div className="p-5 rounded-2xl bg-surface border border-border mb-8 text-left">
-              <p className="text-[10px] uppercase tracking-[0.15em] text-muted/40 mb-2">Your why</p>
+              <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">Your why</p>
               <p className="font-serif italic text-foreground/90">&ldquo;{personalWhy}&rdquo;</p>
             </div>
           )}
+
+          {/* What happens next */}
+          <div className="p-4 rounded-2xl bg-surface-light/50 border border-border mb-8 text-left">
+            <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">What happens now</p>
+            <p className="text-[12px] text-muted/50 leading-relaxed">
+              Now that we know your patterns, PAUSE will watch silently for 7 days. After that, when a recurring vulnerability is detected, you&apos;ll see your words at the moment you need them most.
+            </p>
+          </div>
 
           <button onClick={() => setPhase("priorities")} className="w-full py-3.5 rounded-full text-sm font-medium tracking-wide hover:opacity-90 transition-all" style={{ background: archetype.color, color: "#0A0A0F" }}>
             Set your priorities
@@ -227,7 +284,7 @@ export default function PausePage() {
   if (phase === "priorities") return (
     <div className="min-h-screen bg-background"><Navbar />
       <div className="max-w-sm mx-auto px-6 pt-24 pb-16 animate-in">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted mb-3">Focus areas</p>
+        <p className="text-[11px] uppercase tracking-[0.2em] text-muted/40 mb-3">Focus areas</p>
         <h2 className="font-serif text-2xl italic mb-8">What matters most to you?</h2>
         <div className="space-y-3 mb-8">
           {[
@@ -239,7 +296,7 @@ export default function PausePage() {
             return (
               <button key={p.id} onClick={() => setPriorities((prev) => { const n = new Set(prev); n.has(p.id) ? n.delete(p.id) : n.add(p.id); return n; })} className={`w-full text-left px-5 py-4 rounded-2xl border transition-all ${active ? "border-pause-orange/30 bg-pause-orange/[0.07]" : "border-border hover:border-white/10"}`}>
                 <p className="text-sm font-medium">{p.label}</p>
-                <p className="text-[11px] text-muted/50 mt-0.5">{p.sub}</p>
+                <p className="text-[11px] text-muted/40 mt-0.5">{p.sub}</p>
               </button>
             );
           })}
@@ -255,88 +312,75 @@ export default function PausePage() {
   if (phase === "dashboard") return (
     <div className="min-h-screen bg-background"><Navbar />
       <div className="max-w-lg mx-auto px-6 pt-24 pb-16">
-        {/* Header with avatar */}
         <div className="flex items-center gap-4 mb-8">
           <Avatar archetypeColor={avatarColor} state={resisted > 3 ? "glowing" : resisted > 0 ? "celebrating" : "neutral"} size="md" />
           <div>
             <p className="font-serif italic text-lg" style={{ color: archetype?.color }}>{archetype?.name}</p>
-            <p className="text-[11px] text-muted">{points} points &middot; {resisted} resisted</p>
+            <p className="text-[11px] text-muted/40">{points} points &middot; {resisted} resisted</p>
           </div>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-3 gap-2 mb-6">
-          {[
-            { v: points, l: "Points", c: "#E85D3A" },
-            { v: resisted, l: "Resisted", c: "#6BE8A0" },
-            { v: totalPauses, l: "Pauses", c: undefined },
-          ].map((s) => (
-            <div key={s.l} className="p-3 rounded-xl bg-surface border border-border text-center">
+          {[{ v: points, l: "Points", c: "#E85D3A" }, { v: resisted, l: "Resisted", c: "#6BE8A0" }, { v: totalPauses, l: "Pauses", c: undefined }].map((s) => (
+            <div key={s.l} className="p-3 rounded-2xl bg-surface border border-border text-center">
               <p className="text-lg font-semibold" style={s.c ? { color: s.c } : {}}>{s.v}</p>
-              <p className="text-[10px] text-muted/40">{s.l}</p>
+              <p className="text-[10px] text-muted/30">{s.l}</p>
             </div>
           ))}
         </div>
 
-        {/* Your Why */}
         {personalWhy && (
           <div className="p-5 rounded-2xl bg-surface border border-border mb-6">
-            <p className="text-[10px] uppercase tracking-[0.15em] text-muted/40 mb-2">Your why</p>
+            <p className="text-[10px] uppercase tracking-[0.15em] text-muted/30 mb-2">Your why</p>
             <p className="font-serif italic text-foreground/90">&ldquo;{personalWhy}&rdquo;</p>
           </div>
         )}
 
-        {/* Graduation */}
         <div className="p-4 rounded-2xl bg-surface border border-border mb-6">
-          <div className="flex justify-between text-[11px] text-muted/40 mb-2">
-            <span>Graduation</span>
-            <span>{points} / 200</span>
-          </div>
+          <div className="flex justify-between text-[11px] text-muted/30 mb-2"><span>Graduation</span><span>{points} / 200</span></div>
           <div className="w-full h-1 bg-white/[0.03] rounded-full overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, (points / 200) * 100)}%`, background: "#E85D3A" }} />
           </div>
         </div>
 
-        {/* Trigger pause */}
-        <button onClick={() => { setOutcome(null); setPhase("your_why"); }} className="w-full py-3.5 rounded-full border text-sm font-medium tracking-wide transition-all" style={{ borderColor: "rgba(232,93,58,0.2)", color: "#E85D3A" }}>
+        <button onClick={() => { setOutcome(null); setPhase("your_why"); }} className="w-full py-3.5 rounded-full border text-sm font-medium tracking-wide transition-all" style={{ borderColor: "rgba(232,93,58,0.15)", color: "#E85D3A" }}>
           Simulate a Pause
         </button>
+
+        <div className="mt-8 text-center">
+          <Link href="/" className="text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
+        </div>
       </div>
     </div>
   );
 
-  // ===== YOUR WHY (direct, no cooldown) =====
+  // ===== YOUR WHY =====
   if (phase === "your_why") return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
-      <Navbar />
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6"><Navbar />
       <div className="max-w-sm text-center animate-in">
-        <div className="mb-6 flex justify-center">
-          <Avatar archetypeColor={avatarColor} state="concerned" size="md" />
-        </div>
-        <p className="text-[10px] uppercase tracking-[0.2em] text-muted/40 mb-4">You said this mattered</p>
+        <div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="concerned" size="md" /></div>
+        <p className="text-[10px] uppercase tracking-[0.2em] text-muted/30 mb-4">You said this mattered</p>
         <p className="font-serif text-2xl italic leading-relaxed mb-6">&ldquo;{personalWhy}&rdquo;</p>
         <p className="text-sm mb-10" style={{ color: archetype?.color }}>Pattern detected &middot; This is a recurring moment.</p>
         <div className="space-y-2.5 w-full">
           <button onClick={handleResist} className="w-full py-3 rounded-full text-sm font-medium transition-all" style={{ background: "rgba(107,232,160,0.08)", color: "#6BE8A0" }}>I&apos;ll resist</button>
           <button onClick={handleModify} className="w-full py-3 rounded-full border text-sm font-medium transition-all" style={{ borderColor: "rgba(232,168,58,0.15)", color: "rgba(232,168,58,0.7)" }}>Modify choice</button>
-          <button onClick={handleOverride} className="w-full py-3 rounded-full text-sm text-muted/30 hover:text-muted/60 transition-colors">Override</button>
+          <button onClick={handleOverride} className="w-full py-3 rounded-full text-sm text-muted/20 hover:text-muted/40 transition-colors">Override</button>
         </div>
+        <button onClick={() => setPhase("dashboard")} className="mt-6 text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to dashboard</button>
       </div>
     </div>
   );
 
   // ===== WITNESS =====
   if (phase === "witness") return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
-      <Navbar />
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6"><Navbar />
       <div className="max-w-sm text-center animate-in">
-        <div className="w-4 h-4 rounded-full border border-white/10 mx-auto mb-10 flex items-center justify-center">
-          <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-        </div>
-        <p className="font-serif text-xl italic text-muted/60 mb-10">Noted. No judgment. Just witnessing.</p>
+        <div className="w-4 h-4 rounded-full border border-white/10 mx-auto mb-10 flex items-center justify-center"><div className="w-1.5 h-1.5 rounded-full bg-white/20" /></div>
+        <p className="font-serif text-xl italic text-muted/50 mb-10">Noted. No judgment. Just witnessing.</p>
         <div className="space-y-2.5 w-full">
           <button onClick={handleResist} className="w-full py-3 rounded-full text-sm font-medium" style={{ background: "rgba(107,232,160,0.08)", color: "#6BE8A0" }}>Actually, I&apos;ll resist</button>
-          <button onClick={() => { setOutcome("overrode"); setTotalPauses((t) => t + 1); setOverrideCount((c) => c + 1); setPhase("result"); }} className="w-full py-3 rounded-full text-sm text-muted/20 hover:text-muted/40 transition-colors">Continue anyway</button>
+          <button onClick={() => { setOutcome("overrode"); setTotalPauses((t) => t + 1); setOverrideCount((c) => c + 1); setPhase("result"); }} className="w-full py-3 rounded-full text-sm text-muted/15 hover:text-muted/30 transition-colors">Continue anyway</button>
         </div>
       </div>
     </div>
@@ -344,32 +388,17 @@ export default function PausePage() {
 
   // ===== RESULT =====
   if (phase === "result") return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
-      <Navbar />
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6"><Navbar />
       <div className="max-w-sm text-center animate-in">
-        {outcome === "resisted" && (
-          <>
-            <div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="glowing" size="lg" /></div>
-            <h2 className="font-serif text-2xl italic mb-2">You resisted.</h2>
-            <p className="text-sm text-muted mb-2">+15 points</p>
-          </>
-        )}
-        {outcome === "modified" && (
-          <>
-            <div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="celebrating" size="lg" /></div>
-            <h2 className="font-serif text-2xl italic mb-2">Modified. That counts.</h2>
-            <p className="text-sm text-muted mb-2">+10 points</p>
-          </>
-        )}
-        {outcome === "overrode" && (
-          <>
-            <h2 className="font-serif text-2xl italic mb-2">Noted.</h2>
-            <p className="text-sm text-muted/40 mb-2">No judgment. Every response helps.</p>
-          </>
-        )}
+        {outcome === "resisted" && (<><div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="glowing" size="lg" /></div><h2 className="font-serif text-2xl italic mb-2">You resisted.</h2><p className="text-sm text-muted/40">+15 points</p></>)}
+        {outcome === "modified" && (<><div className="mb-6 flex justify-center"><Avatar archetypeColor={avatarColor} state="celebrating" size="lg" /></div><h2 className="font-serif text-2xl italic mb-2">Modified. That counts.</h2><p className="text-sm text-muted/40">+10 points</p></>)}
+        {outcome === "overrode" && (<><h2 className="font-serif text-2xl italic mb-2">Noted.</h2><p className="text-sm text-muted/20">No judgment. Every response helps.</p></>)}
         <button onClick={() => setPhase("dashboard")} className="mt-8 px-8 py-3 rounded-full text-sm font-medium tracking-wide hover:opacity-90 transition-all" style={{ background: "#E85D3A", color: "#0A0A0F" }}>
-          Dashboard
+          Back to dashboard
         </button>
+        <div className="mt-4">
+          <Link href="/" className="text-[11px] text-muted/15 hover:text-muted/30 transition-colors">Home</Link>
+        </div>
       </div>
     </div>
   );
