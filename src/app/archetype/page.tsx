@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { archetypes } from "@/lib/archetypes";
 import type { Archetype } from "@/lib/archetypes";
+import Avatar from "@/components/Avatar";
 
 const colorMap: Record<string, { bg: string; border: string; text: string; ring: string }> = {
   amber: { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-amber-400", ring: "stroke-amber-400" },
@@ -65,7 +66,9 @@ export default function ArchetypePage() {
     <div className="min-h-screen bg-background py-12 px-6">
       <div className="max-w-xl mx-auto">
         <div className={`text-center transition-all duration-1000 ${revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-          <div className="text-5xl mb-4">{archetype.icon}</div>
+          <div className="mb-4">
+            <Avatar archetypeColor={archetype.color} state={revealed ? "celebrating" : "neutral"} size="xl" />
+          </div>
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">{archetype.name}</h1>
           <p className="text-muted max-w-md mx-auto leading-relaxed mb-8">{archetype.description}</p>
 

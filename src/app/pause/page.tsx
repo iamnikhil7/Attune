@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Avatar from "@/components/Avatar";
 
 type PauseLayer = "cooldown" | "your_why" | "witness" | "response" | "result";
 
@@ -14,8 +15,13 @@ export default function PausePage() {
   const [outcome, setOutcome] = useState<"resisted" | "overrode" | "modified" | null>(null);
   const [overrideReason, setOverrideReason] = useState("");
   const [showReasonInput, setShowReasonInput] = useState(false);
+  const [archetypeColor, setArchetypeColor] = useState("teal");
 
   useEffect(() => {
+    // Load archetype color
+    const archetypes = ["", "amber", "green", "rose", "yellow", "indigo", "pink", "orange", "gray", "slate", "teal"];
+    const id = parseInt(localStorage.getItem("pause_archetype_id") || "10");
+    setArchetypeColor(archetypes[id] || "teal");
     const why = localStorage.getItem("pause_why") || "I want to feel like myself again.";
     setPersonalWhy(why);
 
@@ -87,6 +93,9 @@ export default function PausePage() {
         </div>
 
         <div className="relative z-10 text-center max-w-xs">
+          <div className="mb-6">
+            <Avatar archetypeColor={archetypeColor} state="concerned" size="md" />
+          </div>
           <p className="text-xs text-muted uppercase tracking-wider mb-8">Layer 01 — Cooldown</p>
 
           {/* Timer */}
@@ -209,13 +218,8 @@ export default function PausePage() {
       return (
         <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
           <div className="max-w-sm text-center">
-            {/* Glow effect */}
-            <div className="w-20 h-20 mx-auto rounded-full bg-emerald-500/20 flex items-center justify-center mb-6">
-              <div className="w-12 h-12 rounded-full bg-emerald-500/30 flex items-center justify-center">
-                <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
-              </div>
+            <div className="mb-6">
+              <Avatar archetypeColor={archetypeColor} state="glowing" size="lg" />
             </div>
 
             <h2 className="text-xl font-bold mb-2">You resisted.</h2>
@@ -238,12 +242,8 @@ export default function PausePage() {
       return (
         <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
           <div className="max-w-sm text-center">
-            <div className="w-20 h-20 mx-auto rounded-full bg-amber-500/20 flex items-center justify-center mb-6">
-              <div className="w-12 h-12 rounded-full bg-amber-500/30 flex items-center justify-center">
-                <svg className="w-6 h-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
-              </div>
+            <div className="mb-6">
+              <Avatar archetypeColor={archetypeColor} state="celebrating" size="lg" />
             </div>
 
             <h2 className="text-xl font-bold mb-2">Modified. That counts.</h2>

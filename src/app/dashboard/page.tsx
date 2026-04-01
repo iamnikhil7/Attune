@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { archetypes } from "@/lib/archetypes";
 import type { Archetype } from "@/lib/archetypes";
 import Link from "next/link";
+import Avatar from "@/components/Avatar";
+import type { AvatarState } from "@/components/Avatar";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -45,6 +47,7 @@ export default function DashboardPage() {
 
   const totalPauses = resistCount + overrideCount;
   const points = resistCount * 10;
+  const avatarState: AvatarState = resistCount > 3 ? "glowing" : resistCount > 0 ? "celebrating" : overrideCount > 2 ? "concerned" : "neutral";
 
   return (
     <div className="min-h-screen bg-background">
@@ -69,7 +72,20 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-6 py-8">
-        {/* Quick stats */}
+        {/* Avatar + Quick stats */}
+        <div className="flex items-center gap-4 mb-6 p-5 rounded-xl bg-surface border border-white/5">
+          <Avatar archetypeColor={archetype.color} state={avatarState} size="lg" />
+          <div>
+            <p className="text-sm font-semibold">{archetype.name}</p>
+            <p className="text-xs text-muted mt-0.5">{
+              avatarState === "glowing" ? "Your avatar is glowing — sustained resistance!" :
+              avatarState === "celebrating" ? "Looking good — keep resisting!" :
+              avatarState === "concerned" ? "Your avatar senses a pattern forming." :
+              "Observing your patterns..."
+            }</p>
+          </div>
+        </div>
+
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div className="p-3 rounded-lg bg-surface border border-white/5 text-center">
             <p className="text-lg font-bold text-accent">{points}</p>
