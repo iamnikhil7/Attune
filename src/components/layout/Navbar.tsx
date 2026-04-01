@@ -10,7 +10,6 @@ const navLinks = [
   { href: "/harold", label: "Harold", isSection: false },
   { href: "/crew", label: "Crew", isSection: false },
   { href: "/pause", label: "Pause", isSection: false },
-  { href: "/health", label: "Health", isSection: false },
 ];
 
 export default function Navbar() {

@@ -6,7 +6,10 @@ import Link from "next/link";
 import { scenarios, type OrbState, type Scenario } from "@/lib/harold/scenarios";
 import { type DetectedPattern } from "@/lib/health/patterns";
 
-type HaroldPhase = "notification" | "narration" | "summary" | "actions" | "depth" | "context" | "ack";
+import { generateWeek, type HealthDay, type SimProfile } from "@/lib/health/simulator";
+import { detectPatterns } from "@/lib/health/patterns";
+
+type HaroldPhase = "notification" | "narration" | "summary" | "actions" | "depth" | "context" | "health" | "ack";
 
 export default function HaroldPage() {
   const [phase, setPhase] = useState<HaroldPhase>("notification");
@@ -22,34 +25,55 @@ export default function HaroldPage() {
   const [showContextResult, setShowContextResult] = useState(false);
   const [detectedPatterns, setDetectedPatterns] = useState<DetectedPattern[]>([]);
   const [notificationMsg, setNotificationMsg] = useState("");
+  const [healthDays, setHealthDays] = useState<HealthDay[]>([]);
+  const [healthProfile, setHealthProfile] = useState<SimProfile>("declining");
   const timersRef = useRef<NodeJS.Timeout[]>([]);
 
   const scenario: Scenario = scenarios[activeScenario];
 
-  // Load detected patterns from health data
+  // Generate health data and detect patterns
+  const loadHealthData = useCallback((profile: SimProfile) => {
+    const week = generateWeek(profile);
+    setHealthDays(week);
+    const p = detectPatterns(week);
+    setDetectedPatterns(p);
+    localStorage.setItem("attune_health_data", JSON.stringify(week));
+    localStorage.setItem("attune_patterns", JSON.stringify(p));
+
+    if (p.length > 0) {
+      setNotificationMsg(p[0].caption);
+      if (p[0].type === "rising_rhr" || p[0].type === "stress_accumulation") setActiveScenario("rhr");
+      else if (p[0].type === "declining_sleep" || p[0].type === "late_nights") setActiveScenario("sleep");
+      else if (p[0].type === "low_movement") setActiveScenario("activity");
+    } else {
+      setNotificationMsg("All looks steady. Just checking in.");
+    }
+  }, []);
+
   useEffect(() => {
-    const stored = localStorage.getItem("attune_patterns");
+    // Check if data already exists
+    const stored = localStorage.getItem("attune_health_data");
     if (stored) {
       try {
-        const p = JSON.parse(stored) as DetectedPattern[];
+        const days = JSON.parse(stored) as HealthDay[];
+        setHealthDays(days);
+        const p = detectPatterns(days);
         setDetectedPatterns(p);
-        // Pick notification message based on real patterns
         if (p.length > 0) {
-          const top = p[0];
-          setNotificationMsg(top.caption);
-          // Map pattern type to scenario
-          if (top.type === "rising_rhr" || top.type === "stress_accumulation") setActiveScenario("rhr");
-          else if (top.type === "declining_sleep" || top.type === "late_nights") setActiveScenario("sleep");
-          else if (top.type === "low_movement") setActiveScenario("activity");
+          setNotificationMsg(p[0].caption);
+          if (p[0].type === "rising_rhr" || p[0].type === "stress_accumulation") setActiveScenario("rhr");
+          else if (p[0].type === "declining_sleep" || p[0].type === "late_nights") setActiveScenario("sleep");
+          else if (p[0].type === "low_movement") setActiveScenario("activity");
         } else {
           setNotificationMsg("All looks steady. Just checking in.");
         }
-      } catch { setNotificationMsg("Something feels slightly off today."); }
+      } catch {
+        loadHealthData("declining");
+      }
     } else {
-      const msgs = ["Something feels slightly off today.", "You've been pushing a bit lately."];
-      setNotificationMsg(msgs[Math.floor(Math.random() * msgs.length)]);
+      loadHealthData("declining");
     }
-  }, []);
+  }, [loadHealthData]);
 
   const clearAllTimers = useCallback(() => {
     timersRef.current.forEach(clearTimeout);
@@ -295,9 +319,9 @@ export default function HaroldPage() {
               <p className="text-lg leading-relaxed mb-8">
                 Got it&hellip; during <span className="text-harold">{contextWeek.toLowerCase()}</span> weeks, your body carries more baseline stress. I&apos;ll keep that in mind around <span className="text-harold">{contextWork.toLowerCase()}</span> work and tune future insights accordingly.
               </p>
-              <Link href="/health" className="w-full block text-center py-3 rounded-full border border-border text-sm font-medium hover:bg-white/[0.03] transition-all">
+              <button onClick={() => setPhase("health")} className="w-full py-3 rounded-full border border-border text-sm font-medium hover:bg-white/[0.03] transition-all">
                 View your health data
-              </Link>
+              </button>
               <Link href="/" className="block mt-4 text-center text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
             </div>
           )}
@@ -314,10 +338,106 @@ export default function HaroldPage() {
           <div className="p-6 rounded-2xl border border-border text-center animate-in mb-8">
             <p className="text-lg leading-relaxed">{scenario.ack}</p>
           </div>
-          <div className="flex gap-4">
-            <Link href="/health" className="px-5 py-2.5 rounded-full border border-border text-sm text-muted/50 hover:text-foreground transition-all">View health data</Link>
-            <Link href="/" className="px-5 py-2.5 rounded-full text-sm text-muted/20 hover:text-muted/40 transition-colors">Home</Link>
+          <button onClick={() => setPhase("health")} className="px-6 py-2.5 rounded-full border border-border text-sm text-muted/50 hover:text-foreground transition-all mb-3">
+            View your health data
+          </button>
+          <Link href="/" className="text-[11px] text-muted/20 hover:text-muted/40 transition-colors">Home</Link>
+        </div>
+      </div>
+    );
+  }
+
+  // ===== HEALTH DATA (embedded inside Harold) =====
+  if (phase === "health") {
+    const severityColor: Record<string, string> = { mild: "text-yellow-400", moderate: "text-orange-400", significant: "text-red-400" };
+    const trendArrow: Record<string, string> = { up: "\u2191", down: "\u2193", flat: "\u2192" };
+    const trendColor: Record<string, string> = { up: "text-red-400", down: "text-emerald-400", flat: "text-muted/40" };
+
+    return (
+      <div className="min-h-screen bg-background"><Navbar />
+        <div className="max-w-3xl mx-auto px-6 pt-24 pb-16">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.15em] text-muted/40 mb-1">Harold &bull; Health Data</p>
+              <h1 className="text-2xl">Your week at a glance</h1>
+            </div>
+            <button onClick={() => setPhase("notification")} className="px-4 py-2 rounded-full text-xs font-medium" style={{ background: "#FF8897", color: "#0B0B0B" }}>
+              Back to Harold
+            </button>
           </div>
+
+          {/* Simulation profile */}
+          <div className="p-4 rounded-2xl bg-surface border border-border mb-6">
+            <p className="text-xs text-muted/40 mb-3">Simulate a health profile</p>
+            <div className="flex flex-wrap gap-2">
+              {(["healthy", "stressed", "declining", "recovering"] as SimProfile[]).map((p) => (
+                <button key={p} onClick={() => { setHealthProfile(p); loadHealthData(p); }} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${healthProfile === p ? "bg-white text-background" : "border border-border text-muted/50 hover:text-foreground"}`}>
+                  {p.charAt(0).toUpperCase() + p.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Detected Patterns */}
+          {detectedPatterns.length > 0 && (
+            <div className="mb-8">
+              <p className="text-xs uppercase tracking-[0.15em] text-muted/40 mb-4">Detected patterns</p>
+              <div className="space-y-3">
+                {detectedPatterns.map((p, i) => (
+                  <div key={i} className="p-5 rounded-2xl bg-surface border border-border">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`text-xs font-medium ${severityColor[p.severity]}`}>{p.severity}</span>
+                      <span className="text-xs text-muted/20">&middot;</span>
+                      <span className="text-sm font-medium">{p.title}</span>
+                    </div>
+                    <p className="text-sm text-muted/60 leading-relaxed mb-3">{p.caption}</p>
+                    <div className="flex flex-wrap gap-3">
+                      {p.dataPoints.map((dp, j) => (
+                        <div key={j} className="flex items-center gap-1.5">
+                          <span className="text-xs text-muted/30">{dp.label}:</span>
+                          <span className="text-xs font-medium">{dp.value}</span>
+                          <span className={`text-xs ${trendColor[dp.trend]}`}>{trendArrow[dp.trend]}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {detectedPatterns.length === 0 && (
+            <div className="p-6 rounded-2xl bg-surface border border-border mb-8 text-center">
+              <p className="text-sm text-emerald-400 mb-1">All clear</p>
+              <p className="text-xs text-muted/40">No concerning patterns this week.</p>
+            </div>
+          )}
+
+          {/* Daily Grid */}
+          <div className="mb-8">
+            <p className="text-xs uppercase tracking-[0.15em] text-muted/40 mb-4">Daily metrics</p>
+            <div className="overflow-x-auto">
+              <div className="grid grid-cols-7 gap-2 min-w-[600px]">
+                {healthDays.map((d) => {
+                  const dayName = new Date(d.date).toLocaleDateString("en-US", { weekday: "short" });
+                  const sc = d.stressScore > 70 ? "border-red-500/20 bg-red-500/[0.03]" : d.stressScore > 50 ? "border-orange-500/20 bg-orange-500/[0.03]" : "border-border";
+                  return (
+                    <div key={d.date} className={`p-3 rounded-xl bg-surface border ${sc} text-center`}>
+                      <p className="text-[10px] text-muted/40 mb-2">{dayName}</p>
+                      <p className="text-xs font-medium mb-1">{d.rhr} <span className="text-muted/30">bpm</span></p>
+                      <p className="text-xs text-muted/50">{d.sleepHours}h</p>
+                      <p className="text-xs text-muted/50">{d.steps.toLocaleString()}</p>
+                      <div className="mt-2 w-full h-1 bg-white/[0.03] rounded-full overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width: `${d.stressScore}%`, background: d.stressScore > 70 ? "#ef4444" : d.stressScore > 50 ? "#f97316" : "#22c55e" }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <Link href="/" className="block text-center text-[11px] text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Attune</Link>
         </div>
       </div>
     );
