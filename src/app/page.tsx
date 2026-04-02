@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
+import AttuneLogo from "@/components/ui/AttuneLogo";
 
 const features = [
   { name: "Harold", status: "Active", tagline: "Your Heart Insight Agent", desc: "Watches your data and surfaces what you'd miss. Conversational, contextual, rare enough to matter.", color: "#FF8897", href: "/harold" },
@@ -66,10 +67,8 @@ export default function Home() {
         </div>
         <div className="relative z-10 max-w-2xl mx-auto text-center">
           {/* Logo mark */}
-          <div className="flex items-center justify-center gap-2 mb-8 animate-in">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #E85D3A, #FF8897)" }}>
-              <span className="text-background font-bold text-lg">A</span>
-            </div>
+          <div className="flex items-center justify-center gap-2.5 mb-8 animate-in">
+            <AttuneLogo size={36} className="text-foreground" />
             <span className="text-2xl font-medium tracking-tight">Attune</span>
           </div>
 
@@ -255,9 +254,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #E85D3A, #FF8897)" }}>
-                <span className="text-background font-bold text-xs">A</span>
-              </div>
+              <AttuneLogo size={18} className="text-foreground" />
               <span className="text-sm font-medium">Attune</span>
             </div>
             <span className="text-xs text-muted/25">Health awareness that fits your life</span>

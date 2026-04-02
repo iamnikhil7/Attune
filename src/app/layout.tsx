@@ -5,6 +5,9 @@ import CustomCursor from "@/components/CustomCursor";
 export const metadata: Metadata = {
   title: "Attune — Health Awareness That Fits Your Life",
   description: "Attune transforms your health data into moments of awareness — delivered when you're actually ready to notice.",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

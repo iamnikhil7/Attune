@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import AttuneLogo from "@/components/ui/AttuneLogo";
 
 const navLinks = [
   { href: "/#about", label: "About Us", isSection: true },
@@ -27,8 +28,9 @@ export default function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/90 backdrop-blur-xl border-b border-white/5 py-0" : "bg-transparent py-1"}`}>
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="text-lg font-medium tracking-tight text-foreground hover:opacity-80 transition-opacity duration-200">
-          Attune
+        <Link href="/" className="flex items-center gap-2 text-foreground hover:opacity-80 transition-opacity duration-200">
+          <AttuneLogo size={22} />
+          <span className="text-lg font-medium tracking-tight">Attune</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-1">
