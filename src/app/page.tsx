@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 
@@ -17,22 +18,66 @@ const steps = [
   { n: "05", title: "Awareness builds", desc: "Behavior shifts over time" },
 ];
 
+const team = [
+  {
+    name: "Nikhil",
+    role: "Founder & Lead Developer",
+    bio: "Passionate about building technology that meets people where they are, not where they should be.",
+    initials: "N",
+    color: "#E85D3A",
+  },
+  {
+    name: "Team Member",
+    role: "Design & Research",
+    bio: "Focused on creating experiences that feel human-first, not tech-first.",
+    initials: "A",
+    color: "#FF8897",
+  },
+  {
+    name: "Team Member",
+    role: "Behavioral Science",
+    bio: "Bridging the gap between behavioral psychology and everyday digital experiences.",
+    initials: "A",
+    color: "#9DB0FF",
+  },
+];
+
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim()) {
+      localStorage.setItem("attune_waitlist_email", email);
+      setSubmitted(true);
+      setEmail("");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero — first */}
+      {/* Hero */}
       <section className="min-h-[90vh] flex items-center justify-center px-6 pt-16 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-harold/[0.03] rounded-full blur-[120px]" />
         </div>
         <div className="relative z-10 max-w-2xl mx-auto text-center">
+          {/* Logo mark */}
+          <div className="flex items-center justify-center gap-2 mb-8 animate-in">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #E85D3A, #FF8897)" }}>
+              <span className="text-background font-bold text-lg">A</span>
+            </div>
+            <span className="text-2xl font-medium tracking-tight">Attune</span>
+          </div>
+
           <h1 className="text-5xl sm:text-7xl leading-[1.05] tracking-tight mb-6 animate-in">
             Health awareness<br />that fits your life
           </h1>
           <p className="text-muted text-base max-w-lg mx-auto leading-relaxed mb-10 animate-in-d1">
-            Attune transforms your health data into moments of awareness — delivered when you&apos;re actually ready to notice.
+            Attune transforms your health data into moments of awareness — delivered when you&apos;re actually ready to notice. No guilt. No lectures. Just you, seen clearly.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center animate-in-d2">
             <Link href="/harold" className="px-7 py-3 rounded-full text-sm font-medium transition-all hover:opacity-90" style={{ background: "#FF8897", color: "#0B0B0B" }}>
@@ -41,6 +86,24 @@ export default function Home() {
             <Link href="/pause" className="px-7 py-3 rounded-full border border-white/10 text-sm font-medium hover:bg-white/[0.03] transition-all">
               Explore PAUSE
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission Statement */}
+      <section className="py-16 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="p-8 sm:p-12 rounded-2xl bg-surface border border-border relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none opacity-30">
+              <div className="absolute top-0 left-1/4 w-32 h-32 bg-accent/10 rounded-full blur-[60px]" />
+              <div className="absolute bottom-0 right-1/4 w-32 h-32 bg-harold/10 rounded-full blur-[60px]" />
+            </div>
+            <div className="relative z-10">
+              <p className="text-xs uppercase tracking-wider text-accent/60 mb-4">Our Mission</p>
+              <p className="text-xl sm:text-2xl leading-relaxed text-foreground/90">
+                To close the gap between health data and self-awareness by delivering the right insight, at the right moment, in a way that feels like looking in a mirror — not being told what to do.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -54,10 +117,10 @@ export default function Home() {
           </h2>
           <div className="space-y-5 text-muted leading-relaxed">
             <p>
-              There&apos;s a growing gap between the amount of health data available and the ability of individuals to meaningfully use it. Attune addresses that gap by transforming data into accessible, contextual, and personally relevant content.
+              People don&apos;t lack knowledge about what they should do — they lack awareness at the exact moment they need it. Existing apps focus on tracking metrics and use guilt-based notifications, which fail because they treat symptoms, not patterns.
             </p>
             <p>
-              By meeting users where they already are — rather than asking them to change — it creates a more realistic and sustainable approach to health awareness.
+              Attune is different. Rather than asking users to change, it meets them where they already are — creating a more realistic and sustainable approach to health awareness through identity-anchored, zero-shame interventions.
             </p>
             <blockquote className="text-foreground/80 text-xl leading-relaxed pl-5 border-l-2 border-accent/30 my-8">
               Behavior change is not driven by instruction, but by perception.
@@ -118,11 +181,88 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Team */}
+      <section id="team" className="py-24 px-6 border-t border-white/[0.04]">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-xs uppercase tracking-wider text-muted/50 mb-3">The Team</p>
+          <h2 className="text-3xl mb-4">Built by people who get it</h2>
+          <p className="text-muted leading-relaxed mb-12 max-w-xl">
+            We&apos;ve all experienced identity drift — slowly becoming someone we didn&apos;t fully recognize. Attune is the tool we wished existed.
+          </p>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {team.map((member) => (
+              <div key={member.name} className="p-6 rounded-2xl bg-surface border border-border card-hover text-center">
+                <div
+                  className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-background"
+                  style={{ background: `linear-gradient(135deg, ${member.color}, ${member.color}88)` }}
+                >
+                  {member.initials}
+                </div>
+                <h3 className="text-sm font-semibold mb-1">{member.name}</h3>
+                <p className="text-xs text-accent/70 mb-3">{member.role}</p>
+                <p className="text-xs text-muted/50 leading-relaxed">{member.bio}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Sign Up / Waitlist CTA */}
+      <section className="py-24 px-6 border-t border-white/[0.04]">
+        <div className="max-w-xl mx-auto text-center">
+          <div className="p-8 sm:p-12 rounded-2xl bg-surface border border-border relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full blur-[100px]" style={{ background: "radial-gradient(circle, rgba(232,93,58,0.08) 0%, transparent 70%)" }} />
+            </div>
+            <div className="relative z-10">
+              <h2 className="text-2xl sm:text-3xl mb-3">Join the community</h2>
+              <p className="text-sm text-muted mb-8 max-w-md mx-auto">
+                Be among the first to experience health awareness that actually works. Sign up to get early access and updates.
+              </p>
+
+              {submitted ? (
+                <div className="py-4 px-6 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                  <p className="text-emerald-400 text-sm font-medium">You&apos;re on the list! We&apos;ll be in touch soon.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSignup} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                    className="flex-1 px-4 py-3 rounded-xl bg-background border border-white/10 text-sm text-foreground placeholder:text-muted/40 focus:outline-none focus:border-accent/40 transition-colors"
+                  />
+                  <button
+                    type="submit"
+                    className="px-6 py-3 rounded-xl text-sm font-medium transition-all hover:opacity-90 whitespace-nowrap"
+                    style={{ background: "#E85D3A", color: "#0B0B0B" }}
+                  >
+                    Sign Up
+                  </button>
+                </form>
+              )}
+
+              <p className="text-xs text-muted/30 mt-4">No spam. Just awareness.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-white/[0.04] py-10 px-6">
-        <div className="max-w-4xl mx-auto flex items-center justify-between text-xs text-muted/25">
-          <span className="font-medium">Attune</span>
-          <span>Health awareness that fits your life</span>
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #E85D3A, #FF8897)" }}>
+                <span className="text-background font-bold text-xs">A</span>
+              </div>
+              <span className="text-sm font-medium">Attune</span>
+            </div>
+            <span className="text-xs text-muted/25">Health awareness that fits your life</span>
+            <span className="text-xs text-muted/25">&copy; {new Date().getFullYear()} Attune. All rights reserved.</span>
+          </div>
         </div>
       </footer>
     </div>

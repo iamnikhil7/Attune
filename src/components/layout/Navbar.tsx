@@ -7,6 +7,7 @@ const navLinks = [
   { href: "/#about", label: "About Us", isSection: true },
   { href: "/#features", label: "Features", isSection: true },
   { href: "/#how-it-works", label: "How It Works", isSection: true },
+  { href: "/#team", label: "Team", isSection: true },
   { href: "/harold", label: "Harold", isSection: false },
   { href: "/crew", label: "Crew", isSection: false },
   { href: "/pause", label: "Pause", isSection: false },
