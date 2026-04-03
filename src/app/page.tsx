@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import AttuneLogo from "@/components/ui/AttuneLogo";
@@ -21,25 +22,36 @@ const steps = [
 
 const team = [
   {
-    name: "Nikhil",
+    name: "Nikhil Khanal",
     role: "Founder & Lead Developer",
     bio: "Passionate about building technology that meets people where they are, not where they should be.",
-    initials: "N",
+    initials: "NK",
     color: "#E85D3A",
+    photo: "/team/nikhil.jpg",
   },
   {
-    name: "Team Member",
+    name: "Andy Igwe",
     role: "Design & Research",
     bio: "Focused on creating experiences that feel human-first, not tech-first.",
-    initials: "A",
+    initials: "AI",
     color: "#FF8897",
+    photo: "/team/andy.jpg",
   },
   {
-    name: "Team Member",
+    name: "Mariana Alonso",
     role: "Behavioral Science",
     bio: "Bridging the gap between behavioral psychology and everyday digital experiences.",
-    initials: "A",
+    initials: "MA",
     color: "#9DB0FF",
+    photo: "/team/mariana.jpg",
+  },
+  {
+    name: "Neel Pendse",
+    role: "Engineering",
+    bio: "Driven by the belief that great engineering can make complex things feel effortless.",
+    initials: "NP",
+    color: "#7ED8A6",
+    photo: "/team/neel.jpg",
   },
 ];
 
@@ -182,20 +194,24 @@ export default function Home() {
 
       {/* Team */}
       <section id="team" className="py-24 px-6 border-t border-white/[0.04]">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <p className="text-xs uppercase tracking-wider text-muted/50 mb-3">The Team</p>
           <h2 className="text-3xl mb-4">Built by people who get it</h2>
           <p className="text-muted leading-relaxed mb-12 max-w-xl">
             We&apos;ve all experienced identity drift — slowly becoming someone we didn&apos;t fully recognize. Attune is the tool we wished existed.
           </p>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {team.map((member) => (
               <div key={member.name} className="p-6 rounded-2xl bg-surface border border-border card-hover text-center">
                 <div
-                  className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-background"
+                  className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-background overflow-hidden"
                   style={{ background: `linear-gradient(135deg, ${member.color}, ${member.color}88)` }}
                 >
-                  {member.initials}
+                    {member.photo ? (
+                    <Image src={member.photo} alt={member.name} width={80} height={80} className="w-full h-full object-cover" />
+                  ) : (
+                    member.initials
+                  )}
                 </div>
                 <h3 className="text-sm font-semibold mb-1">{member.name}</h3>
                 <p className="text-xs text-accent/70 mb-3">{member.role}</p>
