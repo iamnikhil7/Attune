@@ -23,7 +23,7 @@ const steps = [
 const team = [
   {
     name: "Nikhil Khanal",
-    role: "Founder & Lead Developer",
+    role: "Founder & Developer",
     bio: "Passionate about building technology that meets people where they are, not where they should be.",
     initials: "NK",
     color: "#E85D3A",
@@ -31,7 +31,7 @@ const team = [
   },
   {
     name: "Andy Igwe",
-    role: "Design & Research",
+    role: "Founder & Researcher",
     bio: "Focused on creating experiences that feel human-first, not tech-first.",
     initials: "AI",
     color: "#FF8897",
@@ -39,7 +39,7 @@ const team = [
   },
   {
     name: "Mariana Alonso",
-    role: "Behavioral Science",
+    role: "Founder & Designer",
     bio: "Bridging the gap between behavioral psychology and everyday digital experiences.",
     initials: "MA",
     color: "#9DB0FF",
@@ -47,7 +47,7 @@ const team = [
   },
   {
     name: "Neel Pendse",
-    role: "Engineering",
+    role: "Founder, Designer & Researcher",
     bio: "Driven by the belief that great engineering can make complex things feel effortless.",
     initials: "NP",
     color: "#7ED8A6",
