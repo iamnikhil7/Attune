@@ -11,7 +11,7 @@ const navLinks = [
   { href: "/#team", label: "Team", isSection: true },
   { href: "/harold", label: "Harold", isSection: false },
   { href: "/crew", label: "Crew", isSection: false },
-  { href: "/pause", label: "Pause", isSection: false },
+  { href: "/pause", label: "Pause (Soon)", isSection: false },
 ];
 
 export default function Navbar() {

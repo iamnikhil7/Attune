@@ -8,7 +8,7 @@ import AttuneLogo from "@/components/ui/AttuneLogo";
 
 const features = [
   { name: "Harold", status: "Active", tagline: "Your Heart Insight Agent", desc: "Watches your data and surfaces what you'd miss. Conversational, contextual, rare enough to matter.", color: "#FF8897", href: "/harold" },
-  { name: "PAUSE", status: "Active", tagline: "Your Behavioral Intelligence Layer", desc: "Identity-anchored interventions at the moment you need them. Mirrors, not blocks. Zero shame.", color: "#E85D3A", href: "/pause" },
+  { name: "PAUSE", status: "Coming Soon", tagline: "Your Behavioral Intelligence Layer", desc: "Identity-anchored interventions at the moment you need them. Mirrors, not blocks. Zero shame.", color: "#E85D3A", href: "/pause" },
   { name: "Crew", status: "Coming Soon", tagline: "A New Kind of Lifestyle Agent", desc: "Something different is being built. Stay tuned.", color: "#9DB0FF", href: "/crew" },
 ];
 
@@ -94,8 +94,8 @@ export default function Home() {
             <Link href="/harold" className="px-7 py-3 rounded-full text-sm font-medium transition-all hover:opacity-90" style={{ background: "#FF8897", color: "#0B0B0B" }}>
               Meet Harold
             </Link>
-            <Link href="/pause" className="px-7 py-3 rounded-full border border-white/10 text-sm font-medium hover:bg-white/[0.03] transition-all">
-              Explore PAUSE
+            <Link href="/pause" className="px-7 py-3 rounded-full border border-white/10 text-sm font-medium hover:bg-white/[0.03] transition-all opacity-50 pointer-events-none">
+              PAUSE — Coming Soon
             </Link>
           </div>
         </div>
