@@ -98,14 +98,14 @@ export default function ReflectionPage() {
   if (!reflection) return null;
 
   return (
-    <div className="min-h-screen bg-[#0B0B0B] text-[#F5F5F0]">
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <main className="max-w-lg mx-auto px-6 pt-28 pb-16 flex flex-col items-center justify-center min-h-[80vh]">
         <AnimatePresence mode="wait">
           {phase === "orb" && (
             <motion.div key="orb" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.6 }} className="flex flex-col items-center gap-6">
               <HaroldOrb size={120} state={reflection.orbState} />
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-sm text-[#F5F5F0]/40">Harold is processing\u2026</motion.p>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="text-sm text-foreground/40">Harold is processing\u2026</motion.p>
             </motion.div>
           )}
           {phase === "message" && (
@@ -114,10 +114,10 @@ export default function ReflectionPage() {
                 <Image src="/harold-mascot.png" alt="Harold" width={80} height={80} />
               </motion.div>
               <div className="space-y-3">
-                <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-xs text-[#FF8897]/60 uppercase tracking-widest">After {reflection.activityName} \u00b7 {getTimeSinceActivity(reflection.attendedAt)}</motion.p>
+                <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-xs text-accent/60 uppercase tracking-widest">After {reflection.activityName} \u00b7 {getTimeSinceActivity(reflection.attendedAt)}</motion.p>
                 <motion.h1 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="font-serif text-2xl leading-relaxed">{reflection.message}</motion.h1>
               </div>
-              <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} onClick={() => setPhase("detail")} className="text-sm text-[#F5F5F0]/40 hover:text-[#F5F5F0]/60 transition-colors">Tell me more \u2192</motion.button>
+              <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} onClick={() => setPhase("detail")} className="text-sm text-foreground/40 hover:text-foreground/60 transition-colors">Tell me more \u2192</motion.button>
             </motion.div>
           )}
           {phase === "detail" && (
@@ -125,13 +125,13 @@ export default function ReflectionPage() {
               <div className="flex items-start gap-4">
                 <div className="shrink-0 pt-1"><HaroldOrb size={40} state={reflection.orbState} /></div>
                 <div className="space-y-4">
-                  <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-sm text-[#F5F5F0]/70 leading-relaxed">{reflection.detail}</motion.p>
-                  <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-sm text-[#FF8897]/70 italic">&ldquo;{reflection.followUp}&rdquo;</motion.p>
+                  <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-sm text-foreground/70 leading-relaxed">{reflection.detail}</motion.p>
+                  <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-sm text-accent/70 italic">&ldquo;{reflection.followUp}&rdquo;</motion.p>
                 </div>
               </div>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="flex flex-col items-center gap-3 pt-4">
-                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={handleAcknowledge} className="px-8 py-3 rounded-full text-sm font-medium bg-[#FF8897] text-[#0B0B0B]">Thanks, Harold</motion.button>
-                <button onClick={() => router.push("/hub")} className="text-xs text-[#F5F5F0]/30 hover:text-[#F5F5F0]/50 transition-colors">Skip to Hub</button>
+                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={handleAcknowledge} className="px-8 py-3 rounded-full text-sm font-medium bg-accent text-[#0B0B0B]">Thanks, Harold</motion.button>
+                <button onClick={() => router.push("/hub")} className="text-xs text-foreground/30 hover:text-foreground/50 transition-colors">Skip to Hub</button>
               </motion.div>
             </motion.div>
           )}
@@ -140,7 +140,7 @@ export default function ReflectionPage() {
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 12 }}>
                 <Image src="/harold-mascot.png" alt="Harold" width={80} height={80} className="mx-auto" />
               </motion.div>
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-sm text-[#F5F5F0]/50">Harold will keep watching. Quietly.</motion.p>
+              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="text-sm text-foreground/50">Harold will keep watching. Quietly.</motion.p>
             </motion.div>
           )}
         </AnimatePresence>
