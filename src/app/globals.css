@@ -243,3 +243,40 @@ input:focus, textarea:focus, select:focus {
 .hover-glow:hover { box-shadow: 0 0 24px rgba(255, 136, 151, 0.12); }
 .hover-lift:hover { transform: translateY(-3px); }
 .hover-brighten:hover { filter: brightness(1.08); }
+
+/* ============================================
+   GRADIENT & VISUAL ENHANCEMENTS
+   ============================================ */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease-in-out infinite;
+}
+
+.bg-grid {
+  background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #FF8897, #FF6B7A, #FFB088);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.scroll-section {
+  scroll-snap-align: start;
+}
+
+.glass {
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
