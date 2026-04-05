@@ -112,7 +112,7 @@ export default function SettingsPage() {
 
   return (
     <motion.div
-      className="min-h-screen bg-[#0B0B0B] text-[#F5F5F0]"
+      className="min-h-screen bg-background text-foreground"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -127,7 +127,7 @@ export default function SettingsPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#FF8897]/15 border border-[#FF8897]/40 text-[#FF8897] text-sm px-4 py-2 rounded-lg backdrop-blur-sm"
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-accent/15 border border-[#8B5CF6]/40 text-accent text-sm px-4 py-2 rounded-lg backdrop-blur-sm"
           >
             Saved
           </motion.div>
@@ -142,7 +142,7 @@ export default function SettingsPage() {
         >
           <Link
             href="/hub"
-            className="text-sm text-[#F5F5F0]/50 hover:text-[#F5F5F0]/80 transition-colors"
+            className="text-sm text-foreground/50 hover:text-foreground/80 transition-colors"
           >
             &larr; Back to Hub
           </Link>
@@ -167,7 +167,7 @@ export default function SettingsPage() {
         >
           <h2 className="font-serif text-lg mb-4">Activity Preferences</h2>
 
-          <p className="text-sm text-[#F5F5F0]/50 mb-3">Activity types</p>
+          <p className="text-sm text-foreground/50 mb-3">Activity types</p>
           <div className="grid grid-cols-2 gap-2 mb-6">
             {activityOptions.map((activity) => {
               const selected = settings.activityPreferences.includes(activity);
@@ -180,8 +180,8 @@ export default function SettingsPage() {
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   className={`px-4 py-3 rounded-lg text-sm text-left transition-all border ${
                     selected
-                      ? "bg-[#FF8897]/10 border-[#FF8897]/40 text-[#F5F5F0]"
-                      : "bg-white/[0.03] border-white/[0.06] text-[#F5F5F0]/60 hover:border-white/10 hover:text-[#F5F5F0]/80"
+                      ? "bg-accent/10 border-[#8B5CF6]/40 text-foreground"
+                      : "bg-white/[0.03] border-white/[0.06] text-foreground/60 hover:border-white/10 hover:text-foreground/80"
                   }`}
                 >
                   {activity}
@@ -190,7 +190,7 @@ export default function SettingsPage() {
             })}
           </div>
 
-          <p className="text-sm text-[#F5F5F0]/50 mb-3">Preferred timing</p>
+          <p className="text-sm text-foreground/50 mb-3">Preferred timing</p>
           <div className="flex gap-2 mb-6">
             {timingOptions.map((timing) => {
               const selected = settings.preferredTiming === timing;
@@ -203,8 +203,8 @@ export default function SettingsPage() {
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   className={`px-4 py-2.5 rounded-lg text-sm transition-all border flex-1 ${
                     selected
-                      ? "bg-[#FF8897]/10 border-[#FF8897]/40 text-[#F5F5F0]"
-                      : "bg-white/[0.03] border-white/[0.06] text-[#F5F5F0]/60 hover:border-white/10 hover:text-[#F5F5F0]/80"
+                      ? "bg-accent/10 border-[#8B5CF6]/40 text-foreground"
+                      : "bg-white/[0.03] border-white/[0.06] text-foreground/60 hover:border-white/10 hover:text-foreground/80"
                   }`}
                 >
                   {timing}
@@ -213,13 +213,13 @@ export default function SettingsPage() {
             })}
           </div>
 
-          <p className="text-sm text-[#F5F5F0]/50 mb-3">Location</p>
+          <p className="text-sm text-foreground/50 mb-3">Location</p>
           <input
             type="text"
             value={settings.location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="City or neighborhood"
-            className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-4 py-3 text-sm text-[#F5F5F0] placeholder:text-[#F5F5F0]/25 focus:outline-none focus:border-[#FF8897]/40 transition-colors"
+            className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-foreground/25 focus:outline-none focus:border-[#8B5CF6]/40 transition-colors"
           />
         </motion.div>
 
@@ -235,12 +235,12 @@ export default function SettingsPage() {
 
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <span className="text-sm text-[#F5F5F0]/70">Connection status</span>
+              <span className="text-sm text-foreground/70">Connection status</span>
               <span
                 className={`text-xs px-2.5 py-1 rounded-full font-medium ${
                   isHealthConnected
-                    ? "bg-[#FF8897]/15 text-[#FF8897]"
-                    : "bg-white/[0.06] text-[#F5F5F0]/40"
+                    ? "bg-accent/15 text-accent"
+                    : "bg-white/[0.06] text-foreground/40"
                 }`}
               >
                 {isHealthConnected ? "Connected" : "Not connected"}
@@ -253,15 +253,15 @@ export default function SettingsPage() {
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
               className={`text-sm px-4 py-2 rounded-lg border transition-all ${
                 isHealthConnected
-                  ? "border-white/10 text-[#F5F5F0]/60 hover:border-white/20 hover:text-[#F5F5F0]/80"
-                  : "border-[#FF8897]/40 text-[#FF8897] hover:bg-[#FF8897]/10"
+                  ? "border-white/10 text-foreground/60 hover:border-white/20 hover:text-foreground/80"
+                  : "border-[#8B5CF6]/40 text-accent hover:bg-accent/10"
               }`}
             >
               {isHealthConnected ? "Disconnect" : "Connect"}
             </motion.button>
           </div>
 
-          <p className="text-xs text-[#F5F5F0]/30 leading-relaxed">
+          <p className="text-xs text-foreground/30 leading-relaxed">
             Your data never leaves your device. Harold only sees patterns, never
             raw metrics.
           </p>
@@ -279,14 +279,14 @@ export default function SettingsPage() {
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#F5F5F0]/70">
+              <span className="text-sm text-foreground/70">
                 Harold&apos;s reflections
               </span>
               <button
                 onClick={toggleNotifyReflections}
                 className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${
                   settings.notifyReflections
-                    ? "bg-[#FF8897]"
+                    ? "bg-accent"
                     : "bg-white/[0.1]"
                 }`}
                 role="switch"
@@ -304,14 +304,14 @@ export default function SettingsPage() {
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#F5F5F0]/70">
+              <span className="text-sm text-foreground/70">
                 Activity reminders
               </span>
               <button
                 onClick={toggleNotifyReminders}
                 className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${
                   settings.notifyReminders
-                    ? "bg-[#FF8897]"
+                    ? "bg-accent"
                     : "bg-white/[0.1]"
                 }`}
                 role="switch"
@@ -341,15 +341,15 @@ export default function SettingsPage() {
           <h2 className="font-serif text-lg mb-4">Account</h2>
 
           <div className="mb-4">
-            <p className="text-xs text-[#F5F5F0]/40 mb-1">Email</p>
-            <p className="text-sm text-[#F5F5F0]/70">user@example.com</p>
+            <p className="text-xs text-foreground/40 mb-1">Email</p>
+            <p className="text-sm text-foreground/70">user@example.com</p>
           </div>
 
           <div className="flex gap-4">
-            <span className="text-sm text-[#F5F5F0]/40 hover:text-[#F5F5F0]/60 transition-colors cursor-pointer">
+            <span className="text-sm text-foreground/40 hover:text-foreground/60 transition-colors cursor-pointer">
               Privacy Policy
             </span>
-            <span className="text-sm text-[#F5F5F0]/40 hover:text-[#F5F5F0]/60 transition-colors cursor-pointer">
+            <span className="text-sm text-foreground/40 hover:text-foreground/60 transition-colors cursor-pointer">
               Terms of Service
             </span>
           </div>
