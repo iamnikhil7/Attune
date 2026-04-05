@@ -27,7 +27,7 @@ const secondaryActivities = [
 
 function getGreeting(): string { const h = new Date().getHours(); if (h < 12) return "Good morning"; if (h < 18) return "Good afternoon"; return "Good evening"; }
 const dotColor: Record<string, string> = { green: "bg-emerald-400", yellow: "bg-amber-400", red: "bg-red-400" };
-const stateColor: Record<HaroldOrbState, string> = { stressed: "bg-red-400", neutral: "bg-[#FF8897]", recovered: "bg-purple-400", thriving: "bg-emerald-400" };
+const stateColor: Record<HaroldOrbState, string> = { stressed: "bg-red-400", neutral: "bg-accent", recovered: "bg-purple-400", thriving: "bg-emerald-400" };
 const stateLabel: Record<HaroldOrbState, string> = { stressed: "Stressed", neutral: "Neutral", recovered: "Recovered", thriving: "Thriving" };
 
 const sectionVariants = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } } };
@@ -69,7 +69,7 @@ export default function HubPage() {
         <motion.header className="flex items-center gap-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <Image src="/harold-mascot.png" alt="Harold" width={40} height={40} className="rounded-full" />
           <div><h1 className="font-serif text-2xl">{greeting}</h1>
-            {archetype && (<motion.span className="inline-block mt-1 text-xs text-[#FF8897]/70 bg-[#FF8897]/10 px-2.5 py-0.5 rounded-full" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, duration: 0.4 }}>Welcome back, {archetype}</motion.span>)}
+            {archetype && (<motion.span className="inline-block mt-1 text-xs text-accent/70 bg-accent/10 px-2.5 py-0.5 rounded-full" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, duration: 0.4 }}>Welcome back, {archetype}</motion.span>)}
           </div>
         </motion.header>
 
@@ -87,7 +87,7 @@ export default function HubPage() {
                   <div className="flex gap-2">{insight.weekDots.map((c, i) => (<motion.div key={i} className={`w-4 h-4 rounded-full ${dotColor[c]}`} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.08 * i, duration: 0.3, type: "spring", stiffness: 400 }} />))}</div>
                 </div>
                 <div className="space-y-2"><span className="text-xs uppercase tracking-wider text-muted/50">What Harold noticed</span>
-                  <ul className="space-y-1.5">{insight.noticed.map((item, i) => (<motion.li key={i} className="text-sm text-muted/80 flex items-start gap-2" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * i + 0.2, duration: 0.3 }}><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#FF8897]/60 shrink-0" />{item}</motion.li>))}</ul>
+                  <ul className="space-y-1.5">{insight.noticed.map((item, i) => (<motion.li key={i} className="text-sm text-muted/80 flex items-start gap-2" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * i + 0.2, duration: 0.3 }}><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent/60 shrink-0" />{item}</motion.li>))}</ul>
                 </div>
                 <div className="space-y-2"><span className="text-xs uppercase tracking-wider text-muted/50">What might help</span>
                   <ul className="space-y-1.5">{insight.suggestions.map((item, i) => (<motion.li key={i} className="text-sm text-muted/80 flex items-start gap-2" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * i + 0.4, duration: 0.3 }}><span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400/60 shrink-0" />{item}</motion.li>))}</ul>
@@ -98,20 +98,26 @@ export default function HubPage() {
           </AnimatePresence>
         </motion.div>)}
 
+        {/* Daily Check-in CTA */}
+        <motion.div className="p-4 rounded-2xl bg-gradient-subtle border border-accent/10 flex flex-col sm:flex-row items-start sm:items-center gap-3" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+          <div className="flex-1"><p className="text-sm font-medium mb-0.5">Daily Check-in</p><p className="text-xs text-muted/60">Tell Harold how you&apos;re feeling today</p></div>
+          <Link href="/check-in" className="inline-block px-5 py-2 rounded-xl bg-gradient-primary text-white text-sm font-medium hover:opacity-90 transition-opacity shrink-0">Check in</Link>
+        </motion.div>
+
         {!healthConnected && (<motion.div className="p-4 rounded-2xl bg-surface/80 backdrop-blur border border-white/[0.06] flex flex-col sm:flex-row items-start sm:items-center gap-3" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.25 }}>
           <p className="text-sm text-muted flex-1">Connect your health data to unlock deeper insights</p>
-          <Link href="/health-connect" className="inline-block px-4 py-2 rounded-full bg-[#FF8897]/15 text-[#FF8897] text-sm font-medium hover:bg-[#FF8897]/25 transition-colors shrink-0">Connect Apple Health</Link>
+          <Link href="/health-connect" className="inline-block px-4 py-2 rounded-full bg-accent/15 text-accent text-sm font-medium hover:bg-accent/25 transition-colors shrink-0">Connect Apple Health</Link>
         </motion.div>)}
 
         <motion.section className="space-y-3" variants={sectionVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <motion.span className="uppercase text-xs tracking-wider text-muted/50 block" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }}>Your anchor</motion.span>
           <motion.div className="p-8 rounded-2xl bg-surface border border-border relative overflow-hidden" whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
-            <div className="absolute -top-20 -left-20 w-60 h-60 rounded-full bg-[#FF8897]/5 blur-3xl pointer-events-none" />
+            <div className="absolute -top-20 -left-20 w-60 h-60 rounded-full bg-accent/5 blur-3xl pointer-events-none" />
             <div className="relative space-y-4">
               <h2 className="font-serif text-xl">Sunday Morning Easy Run</h2>
               <p className="text-sm text-muted">Easy-paced, conversational, all levels welcome</p>
               <div className="flex flex-col gap-1 text-sm text-muted"><span>Sundays at 8:00 AM</span><span>Starts at Central Park South entrance</span></div>
-              <p className="text-sm text-[#FF8897]/70 italic">&ldquo;This might help you build some consistency. Longer sessions like this one tend to create rhythm.&rdquo;</p>
+              <p className="text-sm text-accent/70 italic">&ldquo;This might help you build some consistency. Longer sessions like this one tend to create rhythm.&rdquo;</p>
               <p className="text-xs text-muted/40">18 people joined last week</p>
               <Link href="/hub/activity/sunday-run"><motion.span className="inline-block mt-2 px-5 py-2.5 rounded-full bg-accent text-foreground text-sm font-medium hover:bg-accent-soft transition-colors cursor-pointer" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>I&apos;m interested</motion.span></Link>
             </div>
@@ -123,7 +129,7 @@ export default function HubPage() {
           <motion.div className="grid sm:grid-cols-3 gap-4" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             {secondaryActivities.map((a) => (<motion.div key={a.href} className="p-6 rounded-2xl bg-surface border border-border flex flex-col gap-3" variants={staggerItem} whileHover={cardHover}>
               <h3 className="font-serif text-base">{a.name}</h3><p className="text-xs text-muted">{a.atmosphere}</p><p className="text-xs text-muted/70">{a.timing}</p>
-              <p className="text-xs text-[#FF8897]/70 italic flex-1">&ldquo;{a.haroldNote}&rdquo;</p>
+              <p className="text-xs text-accent/70 italic flex-1">&ldquo;{a.haroldNote}&rdquo;</p>
               <Link href={a.href} className="text-xs text-muted hover:text-foreground transition-colors mt-auto">View details &rarr;</Link>
             </motion.div>))}
           </motion.div>
