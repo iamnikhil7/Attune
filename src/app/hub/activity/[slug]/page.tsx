@@ -1,7 +1,8 @@
 "use client";
 
+import { useCallback } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Navbar from "@/components/layout/Navbar";
@@ -21,9 +22,19 @@ const participants = [
 ];
 
 export default function ActivityDetailPage() {
+  const router = useRouter();
   const params = useParams();
   const slug = params.slug as string;
   const activity = activities[slug];
+
+  const handleInterested = useCallback(() => {
+    const record = { activityName: activity?.name, slug, status: "interested", joinedAt: new Date().toISOString() };
+    localStorage.setItem("harold_last_activity", JSON.stringify({ activityName: activity?.name, attendedAt: new Date().toISOString(), reflectionShown: false }));
+    const existing = JSON.parse(localStorage.getItem("harold_activities") || "[]");
+    existing.push(record);
+    localStorage.setItem("harold_activities", JSON.stringify(existing));
+    router.push("/hub");
+  }, [activity?.name, slug, router]);
 
   if (!activity) {
     return (<><Navbar /><main className="min-h-screen bg-background text-foreground pt-24 px-6"><div className="max-w-2xl mx-auto space-y-6"><h1 className="font-serif text-2xl">Activity not found</h1><p className="text-muted/60">We couldn&apos;t find the activity you&apos;re looking for.</p><Link href="/hub" className="inline-block text-sm text-[#FF8897] hover:underline">&larr; Back to Hub</Link></div></main></>);
@@ -64,7 +75,7 @@ export default function ActivityDetailPage() {
             </section>
             <section className="space-y-2"><p className="text-foreground">{activity.participation}</p><p className="text-sm text-muted/60">{activity.communityNote}</p></section>
             <section className="flex items-center gap-4 pt-2">
-              <motion.button className="bg-[#FF8897] text-black font-medium rounded-full px-7 py-3" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400 }}>I&apos;m interested</motion.button>
+              <motion.button onClick={handleInterested} className="bg-[#FF8897] text-black font-medium rounded-full px-7 py-3" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400 }}>I&apos;m interested</motion.button>
               <motion.div whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 400 }}><Link href="/hub" className="text-muted/60 hover:text-foreground transition-colors px-4 py-3">Not right now</Link></motion.div>
             </section>
           </div>
