@@ -161,7 +161,7 @@ export default function HealthConnectPage() {
                 </div>
               </motion.div>
               <div className="space-y-3">
-                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => setStep(2)} className="w-full py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#FF8897", color: "#0B0B0B" }}>Connect Apple Health</motion.button>
+                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => setStep(2)} className="w-full py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#8B5CF6", color: "#0B0B0B" }}>Connect Apple Health</motion.button>
                 <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => setStep(2)} className="w-full py-3.5 rounded-full text-sm font-medium border border-border text-muted hover:text-foreground transition-colors">Connect Other Wearable</motion.button>
                 <div className="text-center pt-2"><button onClick={handleSkip} className="text-xs text-muted/30 hover:text-muted/50 transition-colors">Skip for now</button></div>
               </div>
@@ -180,14 +180,14 @@ export default function HealthConnectPage() {
                 {PERMISSIONS.map((perm, i) => (
                   <motion.div key={perm.key} layout initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06, duration: 0.35 }} onClick={() => togglePermission(perm.key)} className="flex items-center justify-between p-4 rounded-xl border border-border cursor-pointer select-none hover:border-white/10 transition-colors" style={{ background: permissions[perm.key] ? "rgba(255,136,151,0.06)" : "rgba(255,255,255,0.02)" }}>
                     <div className="flex items-center gap-3"><span className="text-lg">{perm.emoji}</span><span className="text-sm">{perm.label}</span></div>
-                    <motion.div layout className="w-11 h-6 rounded-full p-0.5 cursor-pointer flex items-center" style={{ background: permissions[perm.key] ? "#FF8897" : "rgba(255,255,255,0.1)", justifyContent: permissions[perm.key] ? "flex-end" : "flex-start" }} transition={{ type: "spring", stiffness: 500, damping: 30 }}>
+                    <motion.div layout className="w-11 h-6 rounded-full p-0.5 cursor-pointer flex items-center" style={{ background: permissions[perm.key] ? "#8B5CF6" : "rgba(255,255,255,0.1)", justifyContent: permissions[perm.key] ? "flex-end" : "flex-start" }} transition={{ type: "spring", stiffness: 500, damping: 30 }}>
                       <motion.div layout className="w-5 h-5 rounded-full bg-white shadow-sm" transition={{ type: "spring", stiffness: 500, damping: 30 }} />
                     </motion.div>
                   </motion.div>
                 ))}
               </div>
               <div className="space-y-3">
-                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={handleAllow} className="w-full py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#FF8897", color: "#0B0B0B" }}>Allow Access</motion.button>
+                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={handleAllow} className="w-full py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#8B5CF6", color: "#0B0B0B" }}>Allow Access</motion.button>
                 <div className="text-center pt-1"><button onClick={handleDeny} className="text-xs text-muted/30 hover:text-muted/50 transition-colors">Don&apos;t Allow</button></div>
               </div>
             </motion.div>
@@ -210,8 +210,8 @@ export default function HealthConnectPage() {
                       return (<motion.span key={key} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 + i * 0.08 }} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-surface border border-border"><span>{perm.emoji}</span><span>{perm.label}</span><span className="text-emerald-400">{"\u2713"}</span></motion.span>);
                     })}
                   </div>
-                  {analysisProgress && (<div className="mb-8 max-w-xs mx-auto"><p className="text-xs text-muted/40 mb-2">Initial pattern analysis</p><div className="w-full h-2 bg-white/[0.04] rounded-full overflow-hidden"><motion.div className="h-full rounded-full" style={{ background: "#FF8897" }} initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 3, ease: "easeInOut" }} /></div></div>)}
-                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/hub")} className="px-8 py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#FF8897", color: "#0B0B0B" }}>Go to Hub</motion.button>
+                  {analysisProgress && (<div className="mb-8 max-w-xs mx-auto"><p className="text-xs text-muted/40 mb-2">Initial pattern analysis</p><div className="w-full h-2 bg-white/[0.04] rounded-full overflow-hidden"><motion.div className="h-full rounded-full" style={{ background: "#8B5CF6" }} initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 3, ease: "easeInOut" }} /></div></div>)}
+                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/hub")} className="px-8 py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#8B5CF6", color: "#0B0B0B" }}>Go to Hub</motion.button>
                 </>
               ) : (
                 <>
@@ -220,7 +220,7 @@ export default function HealthConnectPage() {
                   </motion.div>
                   <h2 className="font-serif text-2xl mb-3">No worries!</h2>
                   <p className="text-sm text-muted/60 leading-relaxed max-w-sm mx-auto mb-8">You can connect your health data anytime from Settings. Harold will still suggest activities based on your preferences.</p>
-                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/hub")} className="px-8 py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#FF8897", color: "#0B0B0B" }}>Go to Hub</motion.button>
+                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/hub")} className="px-8 py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#8B5CF6", color: "#0B0B0B" }}>Go to Hub</motion.button>
                 </>
               )}
             </motion.div>
