@@ -1,33 +1,44 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Serif+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=DM+Serif+Display:ital@0;1&display=swap');
 
 :root {
-  --background: #0B0B0B;
-  --foreground: #F5F5F0;
-  --accent: #E85D3A;
-  --accent-soft: #d4522f;
-  --surface: #141414;
-  --surface-light: #1C1C1C;
-  --muted: #888888;
-  --harold: #FF8897;
-  --crew: #9DB0FF;
-  --pause-orange: #E85D3A;
-  --border: #272727;
+  --background: #0A0A0F;
+  --foreground: #F0F0F5;
+  --accent: #8B5CF6;
+  --accent-blue: #3B82F6;
+  --accent-soft: #7C3AED;
+  --accent-pink: #EC4899;
+  --surface: #12121A;
+  --surface-light: #1A1A24;
+  --surface-hover: #22222E;
+  --muted: #8888A0;
+  --harold: #A78BFA;
+  --crew: #60A5FA;
+  --border: #1E1E2E;
+  --border-light: #2A2A3A;
+  --glow-purple: rgba(139, 92, 246, 0.15);
+  --glow-blue: rgba(59, 130, 246, 0.12);
+  --gradient-primary: linear-gradient(135deg, #8B5CF6, #3B82F6);
+  --gradient-accent: linear-gradient(135deg, #8B5CF6, #EC4899);
+  --gradient-subtle: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.1));
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-accent-blue: var(--accent-blue);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-pink: var(--accent-pink);
   --color-surface: var(--surface);
   --color-surface-light: var(--surface-light);
+  --color-surface-hover: var(--surface-hover);
   --color-muted: var(--muted);
   --color-harold: var(--harold);
   --color-crew: var(--crew);
-  --color-pause-orange: var(--pause-orange);
   --color-border: var(--border);
-  --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
+  --color-border-light: var(--border-light);
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-serif: "DM Serif Display", Georgia, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -37,171 +48,77 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "DM Sans", system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 1.65;
-  letter-spacing: -0.005em;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
   cursor: default;
 }
 
 html { scroll-behavior: smooth; }
 
-/* Typography system */
-h1, h2, h3 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; }
-h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
-h2 { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
-h3 { font-size: clamp(1.125rem, 2.5vw, 1.5rem); }
+h1, h2, h3 { font-family: "Inter", system-ui, sans-serif; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+h1 { font-size: clamp(2.5rem, 6vw, 5rem); }
+h2 { font-size: clamp(1.75rem, 4vw, 3rem); }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
 
-.label { font-family: "DM Sans", system-ui, sans-serif; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); opacity: 0.5; }
-.body-lg { font-size: 1.0625rem; line-height: 1.7; }
-.body-sm { font-size: 0.8125rem; line-height: 1.6; }
-.body-xs { font-size: 0.6875rem; line-height: 1.5; }
-button, a { font-family: "DM Sans", system-ui, sans-serif; }
-blockquote, .serif { font-family: "DM Serif Display", Georgia, serif; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; }
-
-/* ============================================
-   CURSOR STYLES
-   ============================================ */
+.font-serif { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; letter-spacing: -0.02em; }
+.label { font-family: "Inter", system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+button, a { font-family: "Inter", system-ui, sans-serif; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
 a, button, [role="button"] { cursor: pointer; }
-a:hover, button:hover { cursor: pointer; }
+a, button, input, textarea, select, [role="button"] { transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 
-/* ============================================
-   GLOBAL TRANSITIONS — everything animates
-   ============================================ */
-a, button, input, textarea, select, [role="button"] {
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
+.card-hover { transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease, border-color 0.3s ease; }
+.card-hover:hover { transform: translateY(-4px); border-color: var(--border-light); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(139, 92, 246, 0.08); }
 
-/* ============================================
-   LINK HOVER EFFECTS
-   ============================================ */
-a:not([class*="rounded"]):hover {
-  opacity: 0.85;
-}
+@keyframes fade-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade-in-scale { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 25% { transform: translateY(-8px) rotate(2deg); } 50% { transform: translateY(-4px) rotate(0deg); } 75% { transform: translateY(-10px) rotate(-2deg); } }
+@keyframes float-simple { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes gradient-shift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@keyframes glow-pulse { 0%, 100% { box-shadow: 0 0 20px var(--glow-purple); } 50% { box-shadow: 0 0 50px var(--glow-purple), 0 0 80px var(--glow-blue); } }
+@keyframes mascot-idle { 0%, 100% { transform: translateY(0) rotate(0deg) scale(1); } 20% { transform: translateY(-6px) rotate(2deg) scale(1.02); } 40% { transform: translateY(-3px) rotate(-1deg) scale(1.01); } 60% { transform: translateY(-8px) rotate(1deg) scale(1.03); } 80% { transform: translateY(-2px) rotate(-2deg) scale(1.01); } }
 
-/* ============================================
-   BUTTON PRESS EFFECTS
-   ============================================ */
-button:active:not(:disabled), a:active:not(:disabled) {
-  transform: scale(0.98);
-  transition: transform 0.1s ease;
-}
+@keyframes pulse-neutral { 0%, 100% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.03); filter: brightness(1.06); } }
+@keyframes pulse-stress { 0%, 100% { transform: scale(0.99) translateX(-0.8px); filter: brightness(1); } 50% { transform: scale(1.035) translateX(0.9px); filter: brightness(1.02); } }
+@keyframes pulse-recovery { 0%, 100% { transform: scale(1); filter: brightness(1.04); } 50% { transform: scale(1.02); filter: brightness(1.08); } }
+@keyframes breathe-circle { 0%, 100% { transform: scale(1); opacity: 0.15; } 50% { transform: scale(1.12); opacity: 0.25; } }
 
-/* ============================================
-   CARD HOVER — subtle lift + glow
-   ============================================ */
-.card-hover {
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-
-/* ============================================
-   SCROLL-TRIGGERED ANIMATIONS
-   ============================================ */
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fade-in-scale {
-  from { opacity: 0; transform: scale(0.96) translateY(8px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes slide-in-left {
-  from { opacity: 0; transform: translateX(-16px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(16px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes blur-in {
-  from { opacity: 0; filter: blur(8px); }
-  to { opacity: 1; filter: blur(0px); }
-}
-@keyframes scale-in {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(232, 93, 58, 0.15); }
-  50% { box-shadow: 0 0 40px rgba(232, 93, 58, 0.25); }
-}
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-@keyframes rotate-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@keyframes line-draw {
-  from { stroke-dashoffset: 1000; }
-  to { stroke-dashoffset: 0; }
-}
-
-/* Orb animations */
-@keyframes pulse-neutral {
-  0%, 100% { transform: scale(1); filter: brightness(1); }
-  50% { transform: scale(1.03); filter: brightness(1.06); }
-}
-@keyframes pulse-stress {
-  0%, 100% { transform: scale(0.99) translateX(-0.8px); filter: brightness(1); }
-  50% { transform: scale(1.035) translateX(0.9px); filter: brightness(1.02); }
-}
-@keyframes pulse-recovery {
-  0%, 100% { transform: scale(1); filter: brightness(1.04); }
-  50% { transform: scale(1.02); filter: brightness(1.08); }
-}
-@keyframes breathe-circle {
-  0%, 100% { transform: scale(1); opacity: 0.15; }
-  50% { transform: scale(1.12); opacity: 0.25; }
-}
-
-/* ============================================
-   ANIMATION UTILITY CLASSES
-   ============================================ */
 .animate-in { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-.animate-in-d1 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards; opacity: 0; }
-.animate-in-d2 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards; opacity: 0; }
-.animate-in-d3 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards; opacity: 0; }
-.animate-in-d4 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards; opacity: 0; }
-.animate-in-d5 { animation: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards; opacity: 0; }
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-float-simple { animation: float-simple 3s ease-in-out infinite; }
+.animate-mascot { animation: mascot-idle 5s ease-in-out infinite; }
+.animate-glow { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-rotate { animation: rotate-slow 25s linear infinite; }
+.animate-gradient { background-size: 200% 200%; animation: gradient-shift 6s ease-in-out infinite; }
+.animate-shimmer { background: linear-gradient(90deg, transparent 0%, rgba(139,92,246,0.04) 50%, transparent 100%); background-size: 200% 100%; animation: shimmer 3s ease-in-out infinite; }
 
-.animate-scale { animation: fade-in-scale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-.animate-slide-up { animation: slide-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-.animate-blur { animation: blur-in 0.7s ease-out forwards; }
-.animate-float { animation: float 3s ease-in-out infinite; }
-.animate-glow { animation: glow-pulse 2.5s ease-in-out infinite; }
-.animate-rotate { animation: rotate-slow 20s linear infinite; }
+.text-gradient { background: linear-gradient(135deg, #8B5CF6, #3B82F6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.text-gradient-pink { background: linear-gradient(135deg, #8B5CF6, #EC4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.bg-gradient-primary { background: linear-gradient(135deg, #8B5CF6, #3B82F6); }
+.bg-gradient-accent { background: linear-gradient(135deg, #8B5CF6, #EC4899); }
+.bg-gradient-subtle { background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(59,130,246,0.08)); }
+.border-gradient { border: 1px solid transparent; background-origin: border-box; background-clip: padding-box, border-box; background-image: linear-gradient(var(--surface), var(--surface)), linear-gradient(135deg, #8B5CF6, #3B82F6); }
 
-.animate-shimmer {
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%);
-  background-size: 200% 100%;
-  animation: shimmer 3s ease-in-out infinite;
-}
+.glass { background: rgba(18, 18, 26, 0.7); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.06); }
+.glass-strong { background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.08); }
+.bg-grid { background-image: linear-gradient(rgba(139,92,246,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.03) 1px, transparent 1px); background-size: 64px 64px; }
+.bg-dots { background-image: radial-gradient(rgba(139,92,246,0.08) 1px, transparent 1px); background-size: 24px 24px; }
 
-/* ============================================
-   PAGE TRANSITION
-   ============================================ */
-.page-enter {
-  animation: fade-in-scale 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
+input:focus, textarea:focus, select:focus { outline: none; border-color: rgba(139, 92, 246, 0.4); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1); }
+::selection { background: rgba(139, 92, 246, 0.25); color: var(--foreground); }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.3); }
 
-/* ============================================
-   STAGGER CHILDREN (add to parent)
-   ============================================ */
+.hover-glow:hover { box-shadow: 0 0 30px var(--glow-purple); }
+.hover-lift:hover { transform: translateY(-4px); }
+button:active:not(:disabled), a:active:not(:disabled) { transform: scale(0.98); transition: transform 0.1s ease; }
+
 .stagger > * { opacity: 0; animation: fade-in 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
 .stagger > *:nth-child(1) { animation-delay: 0.04s; }
 .stagger > *:nth-child(2) { animation-delay: 0.08s; }
@@ -209,74 +126,4 @@ button:active:not(:disabled), a:active:not(:disabled) {
 .stagger > *:nth-child(4) { animation-delay: 0.16s; }
 .stagger > *:nth-child(5) { animation-delay: 0.2s; }
 .stagger > *:nth-child(6) { animation-delay: 0.24s; }
-.stagger > *:nth-child(7) { animation-delay: 0.28s; }
-.stagger > *:nth-child(8) { animation-delay: 0.32s; }
-.stagger > *:nth-child(9) { animation-delay: 0.36s; }
-.stagger > *:nth-child(10) { animation-delay: 0.4s; }
-
-/* ============================================
-   INTERACTIVE FOCUS STATES
-   ============================================ */
-input:focus, textarea:focus, select:focus {
-  outline: none;
-  border-color: rgba(232, 93, 58, 0.3);
-  box-shadow: 0 0 0 3px rgba(232, 93, 58, 0.08);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* ============================================
-   SELECTION COLOR
-   ============================================ */
-::selection { background: rgba(232, 93, 58, 0.2); color: var(--foreground); }
-
-/* ============================================
-   SCROLLBAR (webkit)
-   ============================================ */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.06); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.12); }
-
-/* ============================================
-   TOOLTIP-STYLE HOVER INFO
-   ============================================ */
-.hover-glow:hover { box-shadow: 0 0 24px rgba(255, 136, 151, 0.12); }
-.hover-lift:hover { transform: translateY(-3px); }
-.hover-brighten:hover { filter: brightness(1.08); }
-
-/* ============================================
-   GRADIENT & VISUAL ENHANCEMENTS
-   ============================================ */
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 8s ease-in-out infinite;
-}
-
-.bg-grid {
-  background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, #FF8897, #FF6B7A, #FFB088);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.scroll-section {
-  scroll-snap-align: start;
-}
-
-.glass {
-  background: rgba(20, 20, 20, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
+.page-enter { animation: fade-in-scale 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
