@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
+import HaroldMascot from "@/components/HaroldMascot";
 
 /* ─── Data ─────────────────────────────────────────────────────────── */
 
@@ -132,27 +133,16 @@ export default function Home() {
             className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full blur-[180px]"
             style={{
               background:
-                "radial-gradient(circle, rgba(255,136,151,0.1) 0%, rgba(255,136,151,0.04) 40%, transparent 70%)",
+                "radial-gradient(circle, rgba(139,92,246,0.12) 0%, rgba(59,130,246,0.05) 40%, transparent 70%)",
             }}
           />
         </div>
 
         <div className="relative z-10 max-w-2xl mx-auto text-center flex flex-col items-center">
           {/* Harold mascot */}
-          <motion.div
-            animate={{ y: [0, -15, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="mb-6"
-          >
-            <Image
-              src="/harold-mascot.png"
-              alt="Harold the lion mascot"
-              width={160}
-              height={160}
-              priority
-              className="w-40 h-40 object-contain"
-            />
-          </motion.div>
+          <div className="mb-6">
+            <HaroldMascot size={160} />
+          </div>
 
           {/* Logo text */}
           <motion.p
@@ -203,8 +193,7 @@ export default function Home() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href="/onboarding"
-                className="inline-block px-7 py-3 rounded-full text-sm font-medium transition-all"
-                style={{ background: "#FF8897", color: "#0B0B0B" }}
+                className="inline-block px-7 py-3 rounded-full text-sm font-semibold bg-gradient-primary text-white shadow-lg shadow-accent/20 transition-all"
               >
                 Meet Harold
               </Link>
@@ -271,14 +260,14 @@ export default function Home() {
               className="flex flex-col items-center gap-4"
             >
               <div
-                className="w-20 h-20 rounded-full flex items-center justify-center transition-shadow duration-300 group-hover:shadow-[0_0_40px_rgba(255,136,151,0.25)]"
-                style={{ background: "rgba(255,136,151,0.12)" }}
+                className="w-20 h-20 rounded-full flex items-center justify-center transition-shadow duration-300 group-hover:shadow-[0_0_40px_rgba(139,92,246,0.25)]"
+                style={{ background: "rgba(139,92,246,0.12)" }}
               >
                 <svg
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
-                  fill="#FF8897"
+                  fill="#8B5CF6"
                   className="ml-1"
                 >
                   <polygon points="5,3 19,12 5,21" />
@@ -404,7 +393,7 @@ export default function Home() {
                   className="absolute top-0 left-0 right-0 h-[2px]"
                   style={{
                     background:
-                      "linear-gradient(90deg, #FF8897 0%, rgba(255,136,151,0.2) 100%)",
+                      "linear-gradient(90deg, #8B5CF6 0%, rgba(59,130,246,0.3) 100%)",
                   }}
                 />
                 <span className="text-xs font-mono text-muted/50">{s.n}</span>
@@ -449,7 +438,7 @@ export default function Home() {
                     damping: 12,
                   }}
                   className="font-serif text-4xl sm:text-5xl mb-2"
-                  style={{ color: "#FF8897" }}
+                  style={{ color: "#8B5CF6" }}
                 >
                   {stat.value}
                 </motion.p>
@@ -509,7 +498,7 @@ export default function Home() {
                   />
                 </div>
                 <h3 className="text-sm font-semibold mb-1">{member.name}</h3>
-                <p className="text-xs text-accent/70 mb-3">{member.role}</p>
+                <p className="text-xs text-accent/60 mb-3">{member.role}</p>
                 <p className="text-xs text-muted/50 leading-relaxed">
                   {member.bio}
                 </p>
@@ -568,8 +557,7 @@ export default function Home() {
                     type="submit"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.98 }}
-                    className="px-6 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap"
-                    style={{ background: "#FF8897", color: "#0B0B0B" }}
+                    className="px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-primary text-white shadow-lg shadow-accent/20 whitespace-nowrap transition-all"
                   >
                     Sign Up
                   </motion.button>
