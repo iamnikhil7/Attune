@@ -14,7 +14,7 @@ const freeTierFeatures = [
   "Post-activity insights",
   "Identity anchor system",
   "Basic pattern detection",
-  "Hub with weekly activity suggestions",
+  "Weekly activity suggestions from Harold",
 ];
 
 const premiumFeatures = [
