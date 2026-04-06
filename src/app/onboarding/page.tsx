@@ -126,7 +126,7 @@ export default function OnboardingPage() {
             <div className="w-full h-3 bg-white/[0.06] rounded-full overflow-hidden"><motion.div initial={{ width: 0 }} animate={{ width: `${baseline}%` }} transition={{ delay: 1, duration: 1, ease: "easeOut" }} className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#8B5CF6]/60 rounded-full" /></div>
             <p className="text-xs text-foreground/30 mt-2">{baseline}% &mdash; Room to grow. Harold&apos;s here to help.</p>
           </motion.div>
-          <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }} whileHover={buttonHover} whileTap={buttonTap} onClick={() => router.push("/hub")} className="px-8 py-3 rounded-lg text-sm font-medium bg-accent text-[#0B0B0B]">Show me the Hub</motion.button>
+          <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }} whileHover={buttonHover} whileTap={buttonTap} onClick={() => router.push("/hub")} className="px-8 py-3 rounded-lg text-sm font-medium bg-accent text-[#0B0B0B]">Show me Harold</motion.button>
         </div></motion.div>)}
       </AnimatePresence>
     </div>
