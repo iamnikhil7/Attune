@@ -180,7 +180,7 @@ export default function HealthPage() {
         )}
 
         <div className="mt-8 text-center">
-          <Link href="/hub" className="text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Hub</Link>
+          <Link href="/hub" className="text-xs text-muted/20 hover:text-muted/40 transition-colors">&larr; Back to Harold</Link>
         </div>
       </div>
     </div>
