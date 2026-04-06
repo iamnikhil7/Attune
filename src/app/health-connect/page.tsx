@@ -211,7 +211,7 @@ export default function HealthConnectPage() {
                     })}
                   </div>
                   {analysisProgress && (<div className="mb-8 max-w-xs mx-auto"><p className="text-xs text-muted/40 mb-2">Initial pattern analysis</p><div className="w-full h-2 bg-white/[0.04] rounded-full overflow-hidden"><motion.div className="h-full rounded-full" style={{ background: "#8B5CF6" }} initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 3, ease: "easeInOut" }} /></div></div>)}
-                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/hub")} className="px-8 py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#8B5CF6", color: "#0B0B0B" }}>Go to Hub</motion.button>
+                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/hub")} className="px-8 py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#8B5CF6", color: "#0B0B0B" }}>Go to Harold</motion.button>
                 </>
               ) : (
                 <>
@@ -220,7 +220,7 @@ export default function HealthConnectPage() {
                   </motion.div>
                   <h2 className="font-serif text-2xl mb-3">No worries!</h2>
                   <p className="text-sm text-muted/60 leading-relaxed max-w-sm mx-auto mb-8">You can connect your health data anytime from Settings. Harold will still suggest activities based on your preferences.</p>
-                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/hub")} className="px-8 py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#8B5CF6", color: "#0B0B0B" }}>Go to Hub</motion.button>
+                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => router.push("/hub")} className="px-8 py-3.5 rounded-full text-sm font-semibold transition-colors" style={{ background: "#8B5CF6", color: "#0B0B0B" }}>Go to Harold</motion.button>
                 </>
               )}
             </motion.div>
