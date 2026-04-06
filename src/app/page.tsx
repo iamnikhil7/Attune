@@ -50,7 +50,7 @@ const steps = [
   {
     n: "03",
     title: "Connect",
-    desc: "The Hub presents 2\u20134 real-world group activities that fit your current state. Run clubs, walks, recreational sports\u2014real communities, not digital ones.",
+    desc: "Harold presents 2\u20134 real-world group activities that fit your current state. Run clubs, walks, recreational sports\u2014real communities, not digital ones.",
   },
 ];
 
