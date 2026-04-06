@@ -343,7 +343,7 @@ export default function CheckInPage() {
 
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="flex flex-col items-center gap-3 pt-4">
                 <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} onClick={() => router.push("/hub")} className="px-8 py-3.5 rounded-xl text-sm font-semibold bg-gradient-primary text-white">
-                  Go to Hub
+                  Go to Harold
                 </motion.button>
                 <p className="text-xs text-muted/30">Check-in #{streak + 1} logged</p>
               </motion.div>
