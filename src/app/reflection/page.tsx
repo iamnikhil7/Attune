@@ -59,7 +59,6 @@ function getTimeSinceActivity(attendedAt: string): string {
   return days === 1 ? "yesterday" : `${days} days ago`;
 }
 
-/** Speak text using Web Speech API */
 function haroldSpeak(text: string) {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
@@ -67,7 +66,6 @@ function haroldSpeak(text: string) {
   utterance.rate = 0.9;
   utterance.pitch = 0.95;
   utterance.volume = 0.85;
-  // Try to pick a calm, natural voice
   const voices = window.speechSynthesis.getVoices();
   const preferred = voices.find(
     (v) => v.name.includes("Samantha") || v.name.includes("Daniel") || v.name.includes("Google UK English") || v.name.includes("Alex")
@@ -83,7 +81,6 @@ export default function ReflectionPage() {
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
-    // Preload voices (they load async in some browsers)
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.getVoices();
     }
@@ -111,7 +108,6 @@ export default function ReflectionPage() {
     }
   }, [router]);
 
-  // Speak Harold's message when entering the message phase
   useEffect(() => {
     if (phase === "message" && reflection) {
       setIsSpeaking(true);
@@ -140,11 +136,10 @@ export default function ReflectionPage() {
   if (!reflection) return null;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100dvh] max-w-[430px] mx-auto bg-background text-foreground">
       <Navbar />
       <main className="max-w-lg mx-auto px-6 pt-28 pb-16 flex flex-col items-center justify-center min-h-[80vh]">
         <AnimatePresence mode="wait">
-          {/* Phase 1: Orb processing */}
           {phase === "orb" && (
             <motion.div key="orb" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.6 }} className="flex flex-col items-center gap-6">
               <HaroldOrb size={120} state={reflection.orbState} />
@@ -152,17 +147,14 @@ export default function ReflectionPage() {
             </motion.div>
           )}
 
-          {/* Phase 2: Harold speaks the message */}
           {phase === "message" && (
             <motion.div key="message" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }} className="w-full text-center space-y-8">
-              {/* Harold mascot with speaking animation */}
               <div className="flex justify-center">
                 <motion.div
                   animate={isSpeaking ? { y: [0, -6, 0], scale: [1, 1.05, 1], rotate: [0, 2, -1, 0] } : { y: [0, -8, 0] }}
                   transition={isSpeaking ? { duration: 0.6, repeat: Infinity } : { duration: 3, repeat: Infinity }}
                   className="relative"
                 >
-                  {/* Speaking glow ring */}
                   {isSpeaking && (
                     <motion.div
                       className="absolute inset-0 rounded-2xl"
@@ -171,7 +163,6 @@ export default function ReflectionPage() {
                     />
                   )}
                   <Image src="/harold-mascot.png" alt="Harold" width={100} height={100} className="rounded-2xl shadow-xl shadow-accent/20 ring-1 ring-white/[0.06]" />
-                  {/* Sound wave indicator */}
                   {isSpeaking && (
                     <motion.div className="absolute -right-3 top-1/2 -translate-y-1/2 flex gap-0.5">
                       {[0, 1, 2].map((i) => (
@@ -197,13 +188,11 @@ export default function ReflectionPage() {
             </motion.div>
           )}
 
-          {/* Phase 3: Harold speaks the detail */}
           {phase === "detail" && (
             <motion.div key="detail" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }} className="w-full space-y-8">
               <div className="flex items-start gap-4">
                 <div className="shrink-0 pt-1 relative">
                   <HaroldOrb size={40} state={reflection.orbState} />
-                  {/* Speaking indicator on orb */}
                   {isSpeaking && (
                     <motion.div className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-accent" animate={{ scale: [1, 1.3, 1], opacity: [0.8, 1, 0.8] }} transition={{ duration: 0.8, repeat: Infinity }} />
                   )}
@@ -220,7 +209,6 @@ export default function ReflectionPage() {
             </motion.div>
           )}
 
-          {/* Phase 4: Acknowledged */}
           {phase === "acknowledged" && (
             <motion.div key="ack" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }} className="text-center space-y-4">
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 12 }}>
