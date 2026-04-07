@@ -37,7 +37,7 @@ export default function ActivityDetailPage() {
   }, [activity?.name, slug, router]);
 
   if (!activity) {
-    return (<><Navbar /><main className="min-h-[100dvh] max-w-[430px] mx-auto bg-background text-foreground pt-24 px-6"><div className="max-w-2xl mx-auto space-y-6"><h1 className="font-serif text-2xl">Activity not found</h1><p className="text-muted/60">We couldn&apos;t find the activity you&apos;re looking for.</p><Link href="/hub" className="inline-block text-sm text-accent hover:underline">&larr; Back to Harold</Link></div></main></>);
+    return (<><Navbar /><main className="min-h-full bg-background text-foreground pt-24 px-6"><div className="max-w-2xl mx-auto space-y-6"><h1 className="font-serif text-2xl">Activity not found</h1><p className="text-muted/60">We couldn&apos;t find the activity you&apos;re looking for.</p><Link href="/hub" className="inline-block text-sm text-accent hover:underline">&larr; Back to Harold</Link></div></main></>);
   }
 
   const logisticsRows = [
@@ -50,7 +50,7 @@ export default function ActivityDetailPage() {
   return (
     <><Navbar />
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-        <main className="min-h-[100dvh] max-w-[430px] mx-auto bg-background text-foreground pt-24 px-6 pb-16">
+        <main className="min-h-full bg-background text-foreground pt-24 px-6 pb-16">
           <div className="max-w-2xl mx-auto space-y-10">
             <motion.div whileHover={{ x: -4 }} transition={{ type: "spring", stiffness: 300 }}><Link href="/hub" className="inline-block text-sm text-muted/60 hover:text-foreground transition-colors">&larr; Back to Harold</Link></motion.div>
             <section className="space-y-3">
