@@ -57,7 +57,7 @@ body {
 
 html { scroll-behavior: smooth; height: 100%; }
 
-/* ── Mobile device frame ───────────────────────── */
+/* ── Mobile device frame ─────────────────────────── */
 .device-frame {
   width: 430px;
   max-width: 100vw;
@@ -94,7 +94,7 @@ html { scroll-behavior: smooth; height: 100%; }
   -webkit-overflow-scrolling: touch;
 }
 
-/* ── Desktop (website) frame ───────────────────── */
+/* ── Desktop (website) frame ─────────────────────── */
 .desktop-frame {
   width: 100vw;
   height: 100dvh;
@@ -104,7 +104,7 @@ html { scroll-behavior: smooth; height: 100%; }
   box-shadow: none;
 }
 
-/* ── View toggle button ──────────────────────── */
+/* ── View toggle button ──────────────────────────── */
 .view-toggle {
   position: fixed;
   bottom: 24px;
