@@ -50,7 +50,6 @@ export default function HubPage() {
     try { const hc = localStorage.getItem("health_connected"); if (hc === "true") setHealthConnected(true); } catch {}
     try { const raw = localStorage.getItem("harold_profile"); if (raw) { const p = JSON.parse(raw); if (p?.archetype) setArchetype(p.archetype); } } catch {}
 
-    // Check for pending post-activity reflection
     try {
       const lastActivity = localStorage.getItem("harold_last_activity");
       if (lastActivity) {
@@ -64,7 +63,7 @@ export default function HubPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground"><Navbar />
+    <div className="min-h-[100dvh] max-w-[430px] mx-auto bg-background text-foreground"><Navbar />
       <main className="max-w-4xl mx-auto px-6 pt-24 pb-16 space-y-10">
         <motion.header className="flex items-center gap-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <Image src="/harold-mascot.png" alt="Harold" width={40} height={40} className="rounded-xl shadow-md shadow-accent/10 ring-1 ring-white/[0.06]" />
@@ -98,7 +97,6 @@ export default function HubPage() {
           </AnimatePresence>
         </motion.div>)}
 
-        {/* Health Check-in — Two Options */}
         <motion.div className="rounded-2xl bg-surface border border-border overflow-hidden" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
           <div className="p-5 border-b border-border/50">
             <h3 className="text-sm font-semibold mb-1">How are you feeling?</h3>
