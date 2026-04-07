@@ -24,14 +24,14 @@ const reflectionBank: PostActivityReflection[] = [
     orbState: "recovered",
     message: "You seem a bit steadier today.",
     detail: "After your run on Sunday, your recovery signals shifted. Sleep was deeper that night, and your baseline has been calmer since. It's subtle, but Harold noticed.",
-    followUp: "Keep this rhythm going — consistency matters more than intensity.",
+    followUp: "Keep this rhythm going \u2014 consistency matters more than intensity.",
   },
   {
     activityName: "Lunch Walk",
     attendedAt: "",
     orbState: "neutral",
     message: "That break in the middle of the day helped.",
-    detail: "Your afternoon patterns looked different after the walk — less restlessness, a slight dip in stress signals. Small movements like this can quietly reset your whole day.",
+    detail: "Your afternoon patterns looked different after the walk \u2014 less restlessness, a slight dip in stress signals. Small movements like this can quietly reset your whole day.",
     followUp: "Even 15 minutes of walking shifts things more than you'd expect.",
   },
   {
@@ -47,7 +47,7 @@ const reflectionBank: PostActivityReflection[] = [
     attendedAt: "",
     orbState: "recovered",
     message: "Something shifted after that session.",
-    detail: "Your heart rate variability improved the morning after yoga. That means your nervous system got a genuine reset — not just rest, but actual recovery. Harold noticed your sleep was deeper too.",
+    detail: "Your heart rate variability improved the morning after yoga. That means your nervous system got a genuine reset \u2014 not just rest, but actual recovery. Harold noticed your sleep was deeper too.",
     followUp: "Slower sessions seem to suit your current rhythm. Worth leaning into.",
   },
 ];
