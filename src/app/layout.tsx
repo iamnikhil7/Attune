@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import CustomCursor from "@/components/CustomCursor";
+import ViewModeProvider from "@/components/ViewModeProvider";
 
 export const metadata: Metadata = {
   title: "Harold & Crew — Regain Your Rhythm",
@@ -26,9 +26,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">
-        <CustomCursor />
-        {children}
+      <body className="h-full flex items-center justify-center bg-[#050507]">
+        <ViewModeProvider>{children}</ViewModeProvider>
       </body>
     </html>
   );
