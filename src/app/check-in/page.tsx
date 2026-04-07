@@ -105,7 +105,6 @@ export default function CheckInPage() {
     const stress = d.stressLevel;
     const moved = d.movement !== "none" && d.movement !== "";
 
-    // Pattern analysis from self-reported data
     if (stress >= 3 && sleep <= 1) {
       return { message: "Stress is building and sleep isn\u2019t catching up.", detail: "When stress is high and sleep is low, things compound quietly. Harold thinks even one good night could shift the trajectory. Don\u2019t try to fix everything\u2014just aim for one better night.", orbState: "stressed" };
     }
@@ -131,12 +130,10 @@ export default function CheckInPage() {
     const response = generateHaroldResponse(data);
     setHaroldResponse(response);
 
-    // Save to localStorage
     const history = JSON.parse(localStorage.getItem("harold_checkins") || "[]");
     history.push({ ...data, timestamp: new Date().toISOString(), haroldResponse: response });
     localStorage.setItem("harold_checkins", JSON.stringify(history));
 
-    // Also save as simulated health day for the pattern engine
     const healthDay = {
       date: data.date,
       rhr: 60 + (data.stressLevel * 4) - (data.sleepQuality * 2),
@@ -161,10 +158,9 @@ export default function CheckInPage() {
   const totalSteps = 4;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-[100dvh] max-w-[430px] mx-auto bg-background text-foreground">
       <Navbar />
       <main className="max-w-lg mx-auto px-6 pt-24 pb-16">
-        {/* Progress bar */}
         {step < 4 && (
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
@@ -178,7 +174,6 @@ export default function CheckInPage() {
         )}
 
         <AnimatePresence mode="wait">
-          {/* Step 1: Sleep & Energy */}
           {step === 1 && (
             <motion.div key="s1" variants={stepVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="space-y-10">
               <div className="text-center">
@@ -201,11 +196,7 @@ export default function CheckInPage() {
                 <div>
                   <label className="text-sm font-medium mb-2 block">Hours of sleep</label>
                   <div className="flex items-center gap-4">
-                    <input
-                      type="range" min={3} max={12} step={0.5} value={data.sleepHours}
-                      onChange={(e) => updateData("sleepHours", parseFloat(e.target.value))}
-                      className="flex-1 accent-accent"
-                    />
+                    <input type="range" min={3} max={12} step={0.5} value={data.sleepHours} onChange={(e) => updateData("sleepHours", parseFloat(e.target.value))} className="flex-1 accent-accent" />
                     <span className="text-lg font-bold text-accent w-12 text-right">{data.sleepHours}h</span>
                   </div>
                 </div>
@@ -222,7 +213,6 @@ export default function CheckInPage() {
             </motion.div>
           )}
 
-          {/* Step 2: Stress, Movement & Mood */}
           {step === 2 && (
             <motion.div key="s2" variants={stepVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="space-y-10">
               <div>
@@ -272,7 +262,6 @@ export default function CheckInPage() {
             </motion.div>
           )}
 
-          {/* Step 3: Notes (optional) */}
           {step === 3 && (
             <motion.div key="s3" variants={stepVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="space-y-8">
               <div>
@@ -288,7 +277,6 @@ export default function CheckInPage() {
                 className="w-full bg-surface border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted/30 focus:outline-none focus:border-accent/40 resize-none transition-colors"
               />
 
-              {/* Premium upsell */}
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="p-5 rounded-2xl border border-accent/20 bg-accent/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-xl bg-gradient-primary text-xs font-semibold text-white">Premium</div>
                 <div className="flex items-start gap-3 mt-2">
@@ -313,7 +301,6 @@ export default function CheckInPage() {
             </motion.div>
           )}
 
-          {/* Step 4: Harold's Response */}
           {step === 4 && haroldResponse && (
             <motion.div key="s4" variants={stepVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="space-y-8 text-center pt-8">
               <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 200, damping: 12 }}>
@@ -331,7 +318,6 @@ export default function CheckInPage() {
                 {haroldResponse.detail}
               </motion.p>
 
-              {/* Check-in summary pills */}
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="flex flex-wrap justify-center gap-2">
                 <span className="text-xs px-3 py-1.5 rounded-full bg-surface border border-border">Sleep: {sleepLabels[data.sleepQuality]}</span>
                 <span className="text-xs px-3 py-1.5 rounded-full bg-surface border border-border">Energy: {energyLabels[data.energyLevel]}</span>
