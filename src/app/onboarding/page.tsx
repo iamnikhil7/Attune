@@ -145,11 +145,11 @@ export default function OnboardingPage() {
   const canProceed = isMulti ? ((answers[q?.id] as string[]) || []).length > 0 : !!answers[q?.id];
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #F8F3EC 0%, #F2EBE0 60%, #E8D5B8 100%)" }}>
+    <div className="min-h-[100dvh] max-w-[430px] mx-auto relative overflow-hidden" style={{ background: "linear-gradient(180deg, #F8F3EC 0%, #F2EBE0 60%, #E8D5B8 100%)" }}>
       <AnimatePresence mode="wait">
         {/* ── WELCOME ──────────────────────────────── */}
         {phase === "welcome" && (
-          <motion.div key="welcome" variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.4 }} className="min-h-screen flex flex-col justify-between px-6 pt-16 pb-8 relative overflow-hidden">
+          <motion.div key="welcome" variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.4 }} className="h-[100dvh] flex flex-col justify-between px-5 pb-8 relative overflow-hidden" style={{ paddingTop: "env(safe-area-inset-top, 48px)" }}>
             {/* Background nature image placeholder */}
             <div className="absolute inset-0 opacity-20" style={{ background: "linear-gradient(180deg, rgba(120,160,80,0.3) 0%, rgba(180,160,100,0.2) 100%)" }} />
 
@@ -175,7 +175,7 @@ export default function OnboardingPage() {
 
         {/* ── ASSESSMENT QUESTIONS ──────────────────── */}
         {phase === "assessment" && (
-          <motion.div key={`q-${currentQ}`} variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="min-h-screen flex flex-col px-6 pt-12 pb-6">
+          <motion.div key={`q-${currentQ}`} variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="h-[100dvh] flex flex-col px-5 pb-6" style={{ paddingTop: "env(safe-area-inset-top, 48px)" }}>
             {/* Header */}
             <div className="flex items-center gap-2 mb-6">
               <Image src="/harold-mascot.png" alt="Harold" width={32} height={32} className="rounded-xl shadow-md" />
@@ -263,7 +263,7 @@ export default function OnboardingPage() {
 
         {/* ── HEALTH CONNECTION ─────────────────────── */}
         {phase === "health" && (
-          <motion.div key="health" variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="min-h-screen flex flex-col items-center justify-center px-6 pt-16 pb-8" style={{ background: "linear-gradient(180deg, #F8F3EC 0%, #E8D5B8 100%)" }}>
+          <motion.div key="health" variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="h-[100dvh] flex flex-col items-center justify-center px-5 pb-8" style={{ paddingTop: "env(safe-area-inset-top, 48px)" }}>
             <div className="max-w-xl w-full text-center">
               <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 3, repeat: Infinity }} className="flex justify-center mb-8">
                 <Image src="/harold-mascot.png" alt="Harold" width={80} height={80} className="rounded-2xl shadow-xl" />
@@ -285,7 +285,7 @@ export default function OnboardingPage() {
 
         {/* ── IDENTITY ANCHOR ──────────────────────── */}
         {phase === "anchor" && (
-          <motion.div key="anchor" variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="min-h-screen flex flex-col items-center justify-center px-6 pt-16 pb-8" style={{ background: "linear-gradient(180deg, #F8F3EC 0%, #E8D5B8 100%)" }}>
+          <motion.div key="anchor" variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="h-[100dvh] flex flex-col items-center justify-center px-5 pb-8" style={{ paddingTop: "env(safe-area-inset-top, 48px)" }}>
             <div className="max-w-xl w-full">
               <h2 className="text-2xl mb-4" style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontStyle: "italic", color: "#2A2014" }}>One last thing.</h2>
               <p className="text-sm mb-8 leading-relaxed" style={{ color: "#8B7355" }}>At your lowest moments&mdash;when you&apos;re about to fall back into old patterns&mdash;what words would you want to hear from yourself?</p>
@@ -306,7 +306,7 @@ export default function OnboardingPage() {
 
         {/* ── ARCHETYPE REVEAL ─────────────────────── */}
         {phase === "reveal" && (
-          <motion.div key="reveal" variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="min-h-screen flex flex-col items-center justify-center px-6 pt-16 pb-8" style={{ background: "linear-gradient(180deg, #F8F3EC 0%, #E8D5B8 100%)" }}>
+          <motion.div key="reveal" variants={stepTransition} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.35 }} className="h-[100dvh] flex flex-col items-center justify-center px-5 pb-8" style={{ paddingTop: "env(safe-area-inset-top, 48px)" }}>
             <div className="max-w-xl w-full text-center">
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200, damping: 12 }} className="flex justify-center mb-8">
                 <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 3, repeat: Infinity }}>
