@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 
 type ViewMode = "mobile" | "desktop";
 
@@ -14,6 +14,10 @@ export const useViewMode = () => useContext(ViewModeContext);
 export default function ViewModeProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<ViewMode>("mobile");
   const toggle = useCallback(() => setMode((m) => (m === "mobile" ? "desktop" : "mobile")), []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-view", mode);
+  }, [mode]);
 
   return (
     <ViewModeContext.Provider value={{ mode, toggle }}>
