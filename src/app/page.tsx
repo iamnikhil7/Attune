@@ -7,7 +7,7 @@ import { motion, useScroll, useTransform, useInView, AnimatePresence } from "fra
 import Navbar from "@/components/layout/Navbar";
 import HaroldMascot from "@/components/HaroldMascot";
 
-/* ─── Data ─────────────────────────────────────────────────────────── */
+/* \u2500\u2500\u2500 Data \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
 
 const team = [
   {
@@ -60,7 +60,7 @@ const stats = [
   { value: "Zero", label: "Dashboards or charts" },
 ];
 
-/* ─── Helpers ──────────────────────────────────────────────────────── */
+/* \u2500\u2500\u2500 Helpers \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
 
 function AnimatedSection({
   children,
@@ -84,7 +84,7 @@ function AnimatedSection({
   );
 }
 
-/* ─── Page ─────────────────────────────────────────────────────────── */
+/* \u2500\u2500\u2500 Page \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -121,7 +121,7 @@ export default function Home() {
     <div className="min-h-full bg-background">
       <Navbar />
 
-      {/* ── 1. HERO ────────────────────────────────────────────────── */}
+      {/* \u2500\u2500 1. HERO \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
       <motion.section
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale }}
@@ -154,7 +154,7 @@ export default function Home() {
             Harold &amp; Crew
           </motion.p>
 
-          {/* Headline — staggered word reveal */}
+          {/* Headline \u2014 staggered word reveal */}
           <h1 className="font-serif text-5xl sm:text-7xl leading-[1.05] tracking-tight mb-6 flex flex-wrap justify-center gap-x-4">
             {headlineWords.map((word, i) => (
               <motion.span
@@ -234,7 +234,7 @@ export default function Home() {
         </motion.div>
       </motion.section>
 
-      {/* ── 2. VIDEO SECTION ───────────────────────────────────────── */}
+      {/* \u2500\u2500 2. VIDEO SECTION \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
       <section className="py-24 px-6 border-t border-white/[0.04]" ref={videoRef}>
         <div className="max-w-4xl mx-auto">
           <AnimatedSection className="text-center mb-8">
@@ -279,7 +279,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 3. ABOUT ───────────────────────────────────────────────── */}
+      {/* \u2500\u2500 3. ABOUT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
       <section
         id="about"
         className="py-24 px-6 border-t border-white/[0.04]"
@@ -355,7 +355,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 4. HOW IT WORKS ────────────────────────────────────────── */}
+      {/* \u2500\u2500 4. HOW IT WORKS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
       <section
         id="how-it-works"
         className="py-24 px-6 border-t border-white/[0.04]"
@@ -407,7 +407,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 5. STATS ───────────────────────────────────────────────── */}
+      {/* \u2500\u2500 5. STATS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
       <section className="py-24 px-6 border-t border-white/[0.04]">
         <div className="max-w-4xl mx-auto">
           <div className="grid sm:grid-cols-3 gap-4">
@@ -449,7 +449,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 6. TEAM ────────────────────────────────────────────────── */}
+      {/* \u2500\u2500 6. TEAM \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
       <section
         id="team"
         className="py-24 px-6 border-t border-white/[0.04]"
@@ -508,7 +508,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 7. SIGN UP / CTA ──────────────────────────────────────── */}
+      {/* \u2500\u2500 7. SIGN UP / CTA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
       <section className="py-24 px-6 border-t border-white/[0.04]">
         <div className="max-w-xl mx-auto text-center">
           <AnimatedSection>
@@ -572,7 +572,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FOOTER ──────────────────────────────────────────────── */}
+      {/* \u2500\u2500 FOOTER \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */}
       <footer className="border-t border-border py-12 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="grid sm:grid-cols-4 gap-8 mb-10">
