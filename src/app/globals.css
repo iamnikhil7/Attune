@@ -141,6 +141,36 @@ html { scroll-behavior: smooth; height: 100%; }
   .view-toggle { bottom: 16px; right: 16px; }
 }
 
+/* ── Phone chrome ────────────────────────────────── */
+.phone-status-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 54px; z-index: 100;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 14px 28px 0;
+  pointer-events: none;
+}
+.phone-status-time { font-size: 15px; font-weight: 600; color: white; mix-blend-mode: difference; }
+.phone-dynamic-island {
+  width: 120px; height: 34px; background: #000; border-radius: 20px;
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+}
+.phone-status-icons { display: flex; align-items: center; gap: 5px; mix-blend-mode: difference; }
+.phone-battery {
+  width: 25px; height: 12px; border: 1.5px solid rgba(255,255,255,0.9);
+  border-radius: 3px; padding: 1.5px; position: relative;
+}
+.phone-battery::after {
+  content: ""; position: absolute; right: -4px; top: 50%; transform: translateY(-50%);
+  width: 2px; height: 5px; background: rgba(255,255,255,0.9); border-radius: 0 1px 1px 0;
+}
+.phone-battery-fill { width: 75%; height: 100%; background: rgba(255,255,255,0.9); border-radius: 1px; }
+.phone-home-indicator {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 134px; height: 5px; background: rgba(255,255,255,0.25);
+  border-radius: 100px; z-index: 100; pointer-events: none;
+}
+
 /* Hide scrollbar inside device */
 .device-screen::-webkit-scrollbar { display: none; }
 .device-screen { scrollbar-width: none; }
