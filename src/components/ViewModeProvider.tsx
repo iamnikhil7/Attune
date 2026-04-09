@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 type ViewMode = "mobile" | "desktop";
 
@@ -36,13 +37,29 @@ function StatusBar() {
   );
 }
 
+// Routes that skip the phone device chrome entirely
+const FULL_SCREEN_ROUTES = ["/landing"];
+
 export default function ViewModeProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
   const [mode, setMode] = useState<ViewMode>("mobile");
   const toggle = useCallback(() => setMode((m) => (m === "mobile" ? "desktop" : "mobile")), []);
 
+  const skipDeviceChrome = FULL_SCREEN_ROUTES.includes(pathname);
+
   useEffect(() => {
-    document.documentElement.setAttribute("data-view", mode);
-  }, [mode]);
+    document.documentElement.setAttribute("data-view", skipDeviceChrome ? "desktop" : mode);
+  }, [mode, skipDeviceChrome]);
+
+  if (skipDeviceChrome) {
+    return (
+      <ViewModeContext.Provider value={{ mode: "desktop", toggle }}>
+        <div className="desktop-frame">
+          <div className="device-screen">{children}</div>
+        </div>
+      </ViewModeContext.Provider>
+    );
+  }
 
   return (
     <ViewModeContext.Provider value={{ mode, toggle }}>

@@ -45,6 +45,33 @@ const archetypes = [
   },
 ];
 
+const team = [
+  {
+    name: "Andy Igwe",
+    role: "Founder & Researcher",
+    bio: "Focused on creating experiences that feel human-first, not tech-first.",
+    photo: "/Andy.png",
+  },
+  {
+    name: "Mariana Alonso",
+    role: "Founder & Designer",
+    bio: "Bridging behavioral psychology and everyday digital experiences.",
+    photo: "/Mariana.png",
+  },
+  {
+    name: "Neel Pendse",
+    role: "Founder, Designer & Researcher",
+    bio: "Driven by the belief that great engineering can make complex things feel effortless.",
+    photo: "/Neel.png",
+  },
+  {
+    name: "Nikhil Khanal",
+    role: "Founder, Designer & Developer",
+    bio: "Passionate about building technology that meets people where they are.",
+    photo: "/Nikhil.jpg",
+  },
+];
+
 const steps = [
   {
     n: "01",
@@ -739,6 +766,101 @@ export default function LandingPage() {
               No spam. Just awareness.
             </p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ── 8. TEAM ───────────────────────────────────────── */}
+      <section className="py-16 sm:py-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7 }}
+            className="text-center mb-12"
+          >
+            <p
+              className="text-xs uppercase tracking-[0.15em] mb-3 font-medium"
+              style={{ color: "#9C8B75" }}
+            >
+              The Team
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl mb-3"
+              style={{ fontFamily: '"DM Serif Display", Georgia, serif', color: "#2C2418" }}
+            >
+              Built by people who get it
+            </h2>
+            <p
+              className="text-base max-w-lg mx-auto leading-relaxed"
+              style={{ color: "#7A6C5A" }}
+            >
+              We&apos;ve all experienced identity drift — slowly becoming someone
+              we didn&apos;t fully recognize. Harold &amp; Crew is the tool we
+              wished existed.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {team.map((member, i) => (
+              <motion.div
+                key={member.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+                whileHover={{
+                  y: -4,
+                  transition: { type: "spring", stiffness: 400, damping: 20 },
+                }}
+                className="p-5 rounded-2xl text-center"
+                style={{
+                  background: "rgba(255,255,255,0.55)",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(180,165,140,0.15)",
+                  boxShadow: "0 4px 20px rgba(100,80,60,0.05)",
+                }}
+              >
+                <div
+                  className="w-16 h-16 rounded-full mx-auto mb-3 overflow-hidden"
+                  style={{
+                    boxShadow: "0 4px 12px rgba(100,80,60,0.1)",
+                    border: "2px solid rgba(255,255,255,0.6)",
+                  }}
+                >
+                  <Image
+                    src={member.photo}
+                    alt={member.name}
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3
+                  className="text-sm font-semibold mb-0.5"
+                  style={{ color: "#2C2418" }}
+                >
+                  {member.name}
+                </h3>
+                <p
+                  className="text-[10px] font-medium mb-2"
+                  style={{ color: "#8B6F47" }}
+                >
+                  {member.role}
+                </p>
+                <p
+                  className="text-xs leading-relaxed"
+                  style={{ color: "#7A6C5A" }}
+                >
+                  {member.bio}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
