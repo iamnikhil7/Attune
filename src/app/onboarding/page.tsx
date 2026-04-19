@@ -3,13 +3,13 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { questions } from "@/lib/questions";
 import { archetypes } from "@/lib/archetypes";
 import { calculateArchetypeScores } from "@/lib/scoring";
 import QuestionCard from "@/components/QuestionCard";
 import PhoneHeader from "@/components/PhoneHeader";
 import PillButton from "@/components/PillButton";
+import MascotImage from "@/components/MascotImage";
 
 type Responses = Record<number, string | string[] | number | null>;
 
@@ -43,13 +43,13 @@ function IntroScreen({
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         className="mb-6"
       >
-        <Image
-          src="/mascots/harold.png"
+        <MascotImage
+          name="harold-happy"
           alt="Harold"
-          width={128}
-          height={128}
-          className="mx-auto rounded-[30%]"
-          style={{ filter: "drop-shadow(0 18px 34px rgba(100,80,60,0.2))" }}
+          width={150}
+          height={150}
+          className="mx-auto object-contain"
+          style={{ filter: "drop-shadow(0 18px 34px rgba(100,80,60,0.25))" }}
         />
       </motion.div>
 

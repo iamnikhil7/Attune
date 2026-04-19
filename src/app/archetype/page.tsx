@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { archetypes, type Archetype } from "@/lib/archetypes";
 import PillButton from "@/components/PillButton";
 import MascotImage from "@/components/MascotImage";
-import { ARCHETYPE_LINEUP } from "@/lib/mascots";
+import { ARCHETYPE_MASCOT } from "@/lib/mascots";
 
 /** Poetic display names + taglines for each archetype reveal. */
 const DISPLAY: Record<number, { displayName: string; tagline: string }> = {
@@ -122,13 +121,13 @@ export default function ArchetypeRevealPage() {
                 "radial-gradient(circle, rgba(179,200,230,0.45), transparent 70%)",
             }}
           />
-          <div className="relative flex items-end justify-center gap-1">
+          <div className="relative flex items-end justify-center gap-2">
             <MascotImage
-              name={ARCHETYPE_LINEUP[0]}
+              name="yellow-peaceful"
               alt=""
-              width={52}
-              height={52}
-              className="rounded-[30%] -rotate-6 opacity-90"
+              width={58}
+              height={58}
+              className="object-contain -rotate-6 opacity-85"
             />
             <motion.div
               animate={{ y: [0, -6, 0] }}
@@ -139,22 +138,22 @@ export default function ArchetypeRevealPage() {
               }}
             >
               <MascotImage
-                name={ARCHETYPE_LINEUP[1]}
-                alt="Harold"
-                width={108}
-                height={108}
-                className="rounded-[30%]"
+                name={ARCHETYPE_MASCOT[archetype.id] ?? "blue-angry"}
+                alt={display.displayName}
+                width={140}
+                height={140}
+                className="object-contain"
                 style={{
-                  filter: "drop-shadow(0 16px 32px rgba(100,80,60,0.25))",
+                  filter: "drop-shadow(0 16px 32px rgba(100,80,60,0.3))",
                 }}
               />
             </motion.div>
             <MascotImage
-              name={ARCHETYPE_LINEUP[2]}
+              name="white-peaceful"
               alt=""
-              width={52}
-              height={52}
-              className="rounded-[30%] rotate-6 opacity-90"
+              width={58}
+              height={58}
+              className="object-contain rotate-6 opacity-85"
             />
           </div>
         </motion.div>
@@ -212,12 +211,12 @@ export default function ArchetypeRevealPage() {
           className="w-full flex items-center gap-2 mb-8 px-2"
         >
           <div className="flex flex-col items-center gap-1">
-            <Image
-              src="/mascots/harold.png"
+            <MascotImage
+              name={ARCHETYPE_MASCOT[archetype.id] ?? "blue-angry"}
               alt="You're here"
-              width={42}
-              height={42}
-              className="rounded-[30%]"
+              width={48}
+              height={48}
+              className="object-contain"
               style={{ filter: "grayscale(30%) brightness(0.95)" }}
             />
             <span
@@ -235,14 +234,14 @@ export default function ArchetypeRevealPage() {
             }}
           />
           <div className="flex flex-col items-center gap-1">
-            <Image
-              src="/mascots/harold.png"
+            <MascotImage
+              name="harold-happy"
               alt="What awaits"
-              width={42}
-              height={42}
-              className="rounded-[30%]"
+              width={48}
+              height={48}
+              className="object-contain"
               style={{
-                filter: "drop-shadow(0 6px 14px rgba(100,80,60,0.25))",
+                filter: "drop-shadow(0 6px 14px rgba(100,80,60,0.3))",
               }}
             />
             <span className="text-[10px]" style={{ color: "var(--accent)" }}>

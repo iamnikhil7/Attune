@@ -1,33 +1,42 @@
 # Mascots
 
-Drop the Harold & Crew mascot PNGs here. The website reads from this folder
-via `src/lib/mascots.ts`.
+Four mascots — Harold (pink heart), Blue (gorilla), White (lion), Yellow
+(cloud) — each with a palette of moods. Filenames match the entries in
+`src/lib/mascots.ts`.
 
-## Naming convention
+## Current files
 
-Export each mascot from Figma as PNG @3x with a transparent background.
-Use kebab-case, no spaces.
+| File | Mascot | Mood |
+|---|---|---|
+| `harold.png` | Harold (pink heart) | default (peaceful) |
+| `harold-happy.png` | Harold | cheering, arms up |
+| `harold-peaceful.png` | Harold | eyes closed, hands clasped |
+| `harold-sad.png` | Harold | shy, shoulders in |
+| `harold-angry.png` | Harold | scowling |
+| `harold-love.png` | Harold | heart eyes |
+| `blue-happy.png` | Blue | leaping, excited |
+| `blue-peaceful.png` | Blue | eyes closed, praying |
+| `blue-cry.png` | Blue | crying |
+| `blue-angry.png` | Blue | fierce, arms wide |
+| `blue-worried.png` | Blue | hands over mouth |
+| `white-happy.png` | White | arms up celebrating |
+| `white-peaceful.png` | White | eyes closed, praying |
+| `white-cry.png` | White | crying |
+| `white-angry.png` | White | scowling, mane flared |
+| `white-worried.png` | White | hands over mouth |
+| `white-calm.png` | White | self-hug, content |
+| `yellow-happy.png` | Yellow | cheering, fists up |
+| `yellow-peaceful.png` | Yellow | eyes closed, hands clasped |
+| `yellow-sad.png` | Yellow | frowning |
+| `yellow-tired.png` | Yellow | head down |
+| `yellow-cry.png` | Yellow | crying |
+| `yellow-angry.png` | Yellow | scowling |
 
-### Expected files (the app looks for these first)
+## Adding new mascots / moods
 
-| File | Used for |
-|---|---|
-| `harold.png` | Main Harold mascot — hero, onboarding intro, headers, hub |
-| `harold-neutral.png` *(optional)* | Default Harold expression |
-| `harold-happy.png` *(optional)* | Harold when resisting a pause / thriving |
-| `harold-stressed.png` *(optional)* | Harold when stress is accumulating |
-| `harold-sleepy.png` *(optional)* | Harold when recovery is low |
-| `crew-pink.png` | Pink crew member (landing top-left) |
-| `crew-yellow.png` | Yellow crew member (landing top-left) |
-| `crew-white.png` | White crew member (landing top-left) |
-| `crew-blue.png` | Blue crew member (archetype reveal) |
+1. Drop the PNG in `/public/mascots/` (transparent bg, PNG @3x recommended)
+2. Add the name to `MascotName` in `src/lib/mascots.ts` and map it in `SOURCES`
+3. Reference it with `<MascotImage name="your-name" />` anywhere
 
-If an optional file is missing, the site falls back to `harold.png`.
-
-## Adding new mascots
-
-1. Drop the PNG in `/public/mascots/`
-2. Add an entry to `src/lib/mascots.ts`
-3. Reference it in a screen via `<MascotImage name="harold-happy" .../>`
-
-No code change needed if you use one of the expected filenames above.
+Missing files silently fall back to `harold.png`, so uploads can land
+before code changes without breaking the site.

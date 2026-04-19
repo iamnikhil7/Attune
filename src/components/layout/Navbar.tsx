@@ -56,11 +56,11 @@ export default function Navbar() {
           className="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
         >
           <Image
-            src="/mascots/harold.png"
+            src="/mascots/harold-peaceful.png"
             alt="Harold"
-            width={32}
-            height={32}
-            className="rounded-full"
+            width={34}
+            height={34}
+            className="object-contain"
           />
           <span
             className="text-lg tracking-tight font-serif italic"

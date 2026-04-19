@@ -41,15 +41,15 @@ export default function Home() {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="relative z-10 flex items-center gap-0 px-5 pt-16"
       >
-        <div className="flex items-center -space-x-2">
-          {CREW_LINEUP.map((name, i) => (
+        <div className="flex items-center -space-x-3">
+          {CREW_LINEUP.map((name) => (
             <MascotImage
               key={name}
               name={name}
-              alt={name}
-              width={i === 1 ? 36 : 30}
-              height={i === 1 ? 36 : 30}
-              className="rounded-full border-2 border-white/50 shadow-md object-cover"
+              alt=""
+              width={42}
+              height={42}
+              className="object-contain drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]"
             />
           ))}
         </div>

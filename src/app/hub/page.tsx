@@ -6,10 +6,13 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import PhoneHeader from "@/components/PhoneHeader";
 import PillButton from "@/components/PillButton";
+import MascotImage from "@/components/MascotImage";
+import { haroldForMood } from "@/lib/mascots";
 
 interface Insight {
   headline: string;
   body: string;
+  tone: "steady" | "off" | "stressed";
   weekDots: ("green" | "yellow" | "red")[];
   haroldNote: string;
 }
@@ -18,6 +21,7 @@ const insights: Insight[] = [
   {
     headline: "Something feels slightly off today",
     body: "Your energy is dipping, sleep's been erratic, and the weekend is coming up fast. Subtle, but worth noticing.",
+    tone: "off",
     weekDots: ["yellow", "yellow", "green", "yellow", "red", "yellow", "yellow"],
     haroldNote:
       "Some light movement might help right now — even 15 minutes. Don't stress it.",
@@ -25,6 +29,7 @@ const insights: Insight[] = [
   {
     headline: "You've been finding rhythm this week",
     body: "Movement is up, sleep is steadier, and your recovery numbers look good. Nice and steady.",
+    tone: "steady",
     weekDots: ["green", "green", "green", "yellow", "green", "green", "green"],
     haroldNote:
       "Keep it slow, keep it honest. Something social this weekend could lock it in.",
@@ -32,6 +37,7 @@ const insights: Insight[] = [
   {
     headline: "Stress seems to be accumulating",
     body: "A few late nights and quiet mornings. Your body is asking for a softer gear.",
+    tone: "stressed",
     weekDots: ["yellow", "red", "red", "red", "yellow", "yellow", "green"],
     haroldNote: "A gentler session today could reset the rhythm. No hero hours.",
   },
@@ -135,14 +141,14 @@ export default function HubPage() {
             }}
             className="mx-auto mb-3"
           >
-            <Image
-              src="/mascots/harold.png"
+            <MascotImage
+              name={haroldForMood(insight.tone)}
               alt="Harold"
-              width={66}
-              height={66}
-              className="rounded-[30%] mx-auto"
+              width={88}
+              height={88}
+              className="mx-auto object-contain"
               style={{
-                filter: "drop-shadow(0 10px 24px rgba(100,80,60,0.2))",
+                filter: "drop-shadow(0 12px 28px rgba(100,80,60,0.28))",
               }}
             />
           </motion.div>

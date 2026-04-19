@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import PhoneHeader from "@/components/PhoneHeader";
 import PillButton from "@/components/PillButton";
+import MascotImage from "@/components/MascotImage";
 
 interface AppRow {
   key: string;
@@ -81,20 +81,20 @@ export default function ConnectAppsPage() {
       className="relative min-h-full flex flex-col"
       style={{ background: "var(--gradient-page)" }}
     >
-      {/* Top Harold peek */}
+      {/* Top Harold peek — curious, happy */}
       <motion.div
         initial={{ opacity: 0, x: 30 }}
-        animate={{ opacity: 0.85, x: 0 }}
+        animate={{ opacity: 0.95, x: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
         className="absolute top-20 right-0 z-0 pointer-events-none"
       >
-        <Image
-          src="/mascots/harold.png"
+        <MascotImage
+          name="harold-peaceful"
           alt=""
-          width={90}
-          height={90}
-          className="rounded-[30%] -rotate-12 translate-x-6"
-          style={{ filter: "drop-shadow(0 10px 20px rgba(100,80,60,0.15))" }}
+          width={110}
+          height={110}
+          className="-rotate-12 translate-x-6 object-contain"
+          style={{ filter: "drop-shadow(0 10px 20px rgba(100,80,60,0.2))" }}
         />
       </motion.div>
 
@@ -197,20 +197,20 @@ export default function ConnectAppsPage() {
         </button>
       </div>
 
-      {/* Bottom Crew peek */}
+      {/* Bottom Crew peek — yellow friend waving */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 0.85, y: 0 }}
+        animate={{ opacity: 0.95, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
         className="absolute bottom-28 left-0 z-0 pointer-events-none"
       >
-        <Image
-          src="/mascots/harold.png"
+        <MascotImage
+          name="yellow-happy"
           alt=""
-          width={58}
-          height={58}
-          className="rounded-[30%] rotate-6 -translate-x-3"
-          style={{ filter: "drop-shadow(0 8px 16px rgba(100,80,60,0.12))" }}
+          width={78}
+          height={78}
+          className="rotate-6 -translate-x-3 object-contain"
+          style={{ filter: "drop-shadow(0 8px 16px rgba(100,80,60,0.18))" }}
         />
       </motion.div>
 
