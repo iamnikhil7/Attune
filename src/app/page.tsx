@@ -579,7 +579,7 @@ function MeetHaroldSection() {
 
 function CalendarSection() {
   return (
-    <section className="px-5 sm:px-10 py-16 sm:py-20">
+    <section id="calendar" className="px-5 sm:px-10 py-16 sm:py-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -717,8 +717,8 @@ function FooterSection() {
             <FooterCol
               title="Legal"
               links={[
-                { label: "Privacy", href: "#" },
-                { label: "Terms", href: "#" },
+                { label: "Privacy", href: "/privacy" },
+                { label: "Terms", href: "/terms" },
               ]}
             />
           </div>
